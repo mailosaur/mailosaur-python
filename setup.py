@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='mailosaur',
-      version='0.1',
+      version='0.3',
       description='Package containing python bindings for the mailosaur.com mail testing API.',
       url='http://mailosaur.com/',
       author='Clickity Ltd',
@@ -10,6 +10,7 @@ setup(name='mailosaur',
       license='MIT',
       packages=['mailosaur'],
       install_requires=[
+          'python-dateutil',
           'requests',
           'requests[security]'
       ],
