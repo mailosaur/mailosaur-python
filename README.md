@@ -24,7 +24,7 @@ assertEqual('something', emails[0].subject, 'The subject should be something')
 
 *functions:*
 
-- **Email[] get_emails(String searchPattern)** - Retrieves all emails which have the searchPattern text in their body or subject.
+- **Email[] get_emails(search_pattern)** - Retrieves all emails which have the searchPattern text in their body or subject.
 
 - **Email[] get_emails_by_recipient(recipientEmail)** -
 Retrieves all emails sent to the given recipient.
