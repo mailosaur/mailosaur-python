@@ -14,7 +14,8 @@ class Mailosaur:
     def __init__(self, mailbox, api_key):
         self.mailbox = mailbox
         self.api_key = api_key
-        self.base_uri = 'https://api.mailosaur.com/v2'
+        self.base_uri = 'https://mailosaur.com/api'
+        self.smtp_host = 'mailosaur.in'
 
     # Retrieves all emails which have the searchPattern text in their body or subject.
     def get_emails(self, search_criteria=None, retries=10):
@@ -26,12 +27,11 @@ class Mailosaur:
         else:
             params = search_criteria
         params['key'] = self.api_key
-        params['mailbox'] = self.mailbox
 
         emails = None
 
         for i in range(1, retries+1):
-            response = requests.get(self.base_uri + '/emails', params=params)
+            response = requests.get(self.base_uri + '/mailboxes/' + self.mailbox + '/emails', params=params)
             data = response.json()
             emails = [Email(k) for k in data]
 
@@ -53,7 +53,7 @@ class Mailosaur:
         params = dict()
         params['key'] = self.api_key
 
-        response = requests.get(self.base_uri + '/email/' + email_id, params=params)
+        response = requests.get(self.base_uri + '/emails/' + email_id, params=params)
         data = response.json(response.text)
         email = Email(data)
         return email
@@ -62,21 +62,20 @@ class Mailosaur:
     def delete_all_email(self):
         params = dict()
         params['key'] = self.api_key
-        params['mailbox'] = self.mailbox
 
-        requests.post(self.base_uri + '/emails/deleteall', None, params=params)
+        requests.post(self.base_uri + '/mailboxes/' + self.mailbox + '/empty', None, params=params)
 
     # Deletes the email with the given id.
     def delete_email(self, email_id):
         params = dict()
         params['key'] = self.api_key
-        requests.post(self.base_uri + '/email/' + email_id + '/delete/', None, params=params)
+        requests.post(self.base_uri + '/emails/' + email_id + '/delete', None, params=params)
 
     # Retrieves the attachment with specified id.
     def get_attachment(self, attachment_id):
         params = dict()
         params['key'] = self.api_key
-        response = requests.get(self.base_uri + '/attachment/' + attachment_id, params=params)
+        response = requests.get(self.base_uri + '/attachments/' + attachment_id, params=params)
         return response.text
 
         # Retrieves the complete raw EML file for the rawId given. RawId is a property on the email object.
@@ -91,4 +90,4 @@ class Mailosaur:
         # Generates a random email address which can be used to send emails into the mailbox.
 
     def generate_email_address(self):
-        return "%s.%s@mailosaur.in" % (uuid.uuid4(), self.mailbox)
+        return "%s.%s@%s" % (uuid.uuid4(), self.mailbox, self.smtp_host)
