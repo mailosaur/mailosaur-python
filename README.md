@@ -1,4 +1,4 @@
-# Mailosaur Python bindings
+# Mailosaur Python client library
 
 Mailosaur allows you to automate tests that require email. You can also use it for manual testing as it gives you unlimited test email addresses or use it as a fake/dummy SMTP service.
 
