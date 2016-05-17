@@ -8,14 +8,11 @@ from email import Email
 # Main class to access Mailosaur.com api.
 class Mailosaur:
     # Pass in your mailbox id and api key to authenticate
-    # Leave mailbox and/or api_key empty to load settings from environment.
-    # export MAILOSAUR_api_key=abcex7
-    # export MAILOSAUR_MAILBOX=123456abcde
-    def __init__(self, mailbox, api_key, base_url, smtp_host):
+    init(self, mailbox, api_key, base_url = 'https://mailosaur.com/api', smtp_host = 'mailosaur.io'):
         self.mailbox = mailbox
         self.api_key = api_key
-        self.base_url = base_url or 'https://mailosaur.com/api'
-        self.smtp_host = smtp_host or 'mailosaur.in'
+        self.base_url = base_url
+        self.smtp_host = smtp_host
 
     # Retrieves all emails which have the searchPattern text in their body or subject.
     def get_emails(self, search_criteria=None, retries=10):
