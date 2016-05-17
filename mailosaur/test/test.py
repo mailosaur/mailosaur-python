@@ -26,8 +26,6 @@ class MailosaurTest(TestCase):
         recipient = self.send_test_email('two')
         self.send_test_email('three')
 
-        # wait for emails to be received fully:
-        time.sleep(2)
         emails = self.mailbox.get_emails()
         self.assertEqual(3, len(emails))
 
@@ -65,9 +63,6 @@ class MailosaurTest(TestCase):
     def test_empty_mailbox(self):
         self.send_test_email('one')
         self.send_test_email('two')
-
-        # wait to ensure emails have been processed
-        time.sleep(4)
 
         self.mailbox.delete_all_email()
         emails = self.mailbox.get_emails(None, 1)

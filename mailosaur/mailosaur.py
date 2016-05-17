@@ -27,17 +27,11 @@ class Mailosaur:
 
         emails = None
 
-        for i in range(1, retries+1):
-            response = requests.get(self.base_url + '/mailboxes/' + self.mailbox + '/emails', params=params)
-            response.raise_for_status()
-            data = response.json()
-            emails = [Email(k) for k in data]
+        response = requests.get(self.base_url + '/mailboxes/' + self.mailbox + '/emails', params=params)
+        response.raise_for_status()
+        data = response.json()
+        emails = [Email(k) for k in data]
 
-            if emails:
-                return emails
-
-            # back off and retry
-            time.sleep(i * i)
         return emails
 
     # Retrieves all emails sent to the given recipient.
