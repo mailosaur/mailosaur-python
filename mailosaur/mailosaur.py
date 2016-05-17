@@ -8,7 +8,7 @@ from email import Email
 # Main class to access Mailosaur.com api.
 class Mailosaur:
     # Pass in your mailbox id and api key to authenticate
-    init(self, mailbox, api_key, base_url = 'https://mailosaur.com/api', smtp_host = 'mailosaur.io'):
+    def __init__(self, mailbox, api_key, base_url='https://mailosaur.com/api', smtp_host='mailosaur.io'):
         self.mailbox = mailbox
         self.api_key = api_key
         self.base_url = base_url
