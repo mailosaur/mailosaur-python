@@ -46,7 +46,8 @@ class Mailosaur:
         params['key'] = self.api_key
 
         response = requests.get(self.base_url + '/emails/' + email_id, params=params)
-        data = response.json(response.text)
+        response.raise_for_status()
+        data = response.json()
         email = Email(data)
         return email
 

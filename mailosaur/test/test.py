@@ -32,6 +32,21 @@ class MailosaurTest(TestCase):
         email = next(x for x in emails if x.to_address[0].address == recipient)
         self.assert_email(email, recipient, 'two')
 
+    def test_get_email(self):
+        # ensure mailbox is empty to prevent picking up previous test emails:
+        self.mailbox.delete_all_email()
+
+        # send one email:
+        recipient = self.send_test_email('one')
+
+        emails = self.mailbox.get_emails()
+        self.assertEqual(1, len(emails))
+
+        # get the first email on it's own:
+        email = self.mailbox.get_email(emails[0].id)
+
+        self.assert_email(email, recipient, 'one')
+
     def test_get_emails_search(self):
         # ensure mailbox is empty to prevent picking up previous test emails:
         self.mailbox.delete_all_email()
