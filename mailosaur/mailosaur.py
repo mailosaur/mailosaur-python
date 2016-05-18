@@ -83,4 +83,4 @@ class Mailosaur:
         # Generates a random email address which can be used to send emails into the mailbox.
 
     def generate_email_address(self):
-        return "%s.%s@%s" % (uuid.uuid4(), self.mailbox, self.smtp_host)
+        return "%s.%s@%s" % (uuid.uuid4(), self.mailbox, "mailosaur.in")
