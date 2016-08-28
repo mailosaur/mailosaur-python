@@ -1,1 +1,1 @@
-__author__ = 'Clickity Ltd'
+__author__ = 'Mailosaur Ltd'
