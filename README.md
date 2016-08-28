@@ -21,6 +21,9 @@ Once you've cloned this repository locally, you can simply run:
 ```
 pip install -r requirements.txt
 
+export MAILOSAUR_MAILBOX_ID=yourmailbox
+export MAILOSAUR_API_KEY=yourapikey
+
 nosetests
 ```
 
