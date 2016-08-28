@@ -10,11 +10,11 @@ from mailosaur.mailosaur import Mailosaur
 
 class MailosaurTest(TestCase):
     def setUp(self):
-        mailbox_id = os.environ["MAILOSAUR_MAILBOX_ID"].strip()
-        api_key = os.environ["MAILOSAUR_API_KEY"].strip()
-        base_url = os.environ["MAILOSAUR_BASE_URL"]
-        self.smtp_host = os.environ["MAILOSAUR_SMTP_HOST"]
-        self.smtp_port = os.environ["MAILOSAUR_SMTP_PORT"]
+        mailbox_id = os.environ.get("MAILOSAUR_MAILBOX_ID").strip()
+        api_key = os.environ.get("MAILOSAUR_API_KEY").strip()
+        base_url = os.environ.get("MAILOSAUR_BASE_URL") or 'https://mailosaur.com/api'
+        self.smtp_host = os.environ.get("MAILOSAUR_SMTP_HOST") or 'mailosaur.io'
+        self.smtp_port = os.environ.get("MAILOSAUR_SMTP_PORT") or 25
         self.mailbox = Mailosaur(mailbox_id, api_key, base_url, self.smtp_host)
 
     def test_get_emails(self):
@@ -183,14 +183,14 @@ class MailosaurTest(TestCase):
         alt.attach(MIMEText(text))
         alt.attach(MIMEText(html, 'html'))
 
-        fp = open('logo-m.png', 'rb')
+        fp = open(os.path.join(os.path.dirname(__file__), 'logo-m.png'), 'rb')
         img = MIMEImage(fp.read())
         fp.close()
         img.add_header('Content-ID', 'inline_cid')
         img.add_header('Content-Disposition', 'inline', filename='logo-m.png')
         msg.attach(img)
 
-        fp = open('logo-m-circle-sm.png', 'rb')
+        fp = open(os.path.join(os.path.dirname(__file__), 'logo-m-circle-sm.png'), 'rb')
         img = MIMEImage(fp.read())
         fp.close()
         img.add_header('Content-Disposition', 'attachment', filename='logo-m-circle-sm.png')
@@ -202,3 +202,6 @@ class MailosaurTest(TestCase):
         smtp.quit()
 
         return to_address
+
+if __name__ == '__main__':
+    unittest.main()
