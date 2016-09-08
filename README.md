@@ -2,7 +2,7 @@
 
 [Mailosaur](https://mailosaur.com) allows you to automate tests involving email. Allowing you to perform end-to-end automated and functional email testing.
 
-[![Build Status](https://travis-ci.org/mailosaurapp/mailosaur-python.svg?branch=master)](https://travis-ci.org/mailosaurapp/mailosaur-python)
+[![Build Status](https://travis-ci.org/mailosaur/mailosaur-python.svg?branch=master)](https://travis-ci.org/mailosaur/mailosaur-python)
 
 ## Installation
 
