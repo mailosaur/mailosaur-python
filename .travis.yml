@@ -3,5 +3,8 @@ python:
 - '2.7'
 script: nosetests
 env:
+  global:
+    - secure: dGISwfg6yRMlhKoAv7WFXZxRvMhCPYDITdMnJ+6P/BYHpodHaijEusdpR8IadVur8kDzvm6Arw47w/unphuyGa4S30D43iSFtBm6URFeFwEKx0t88hYAE9W4KZdNH5wQA86FVgQXGBItNlkA5c7E8XcpyrKJ1pngzUUIgRhevuk=
   matrix:
-    secure: dGISwfg6yRMlhKoAv7WFXZxRvMhCPYDITdMnJ+6P/BYHpodHaijEusdpR8IadVur8kDzvm6Arw47w/unphuyGa4S30D43iSFtBm6URFeFwEKx0t88hYAE9W4KZdNH5wQA86FVgQXGBItNlkA5c7E8XcpyrKJ1pngzUUIgRhevuk=
+    - MAILOSAUR_BASE_URL=https://mailosaur.com/api/ MAILOSAUR_SMTP_HOST=mailosaur.io
+    - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
