@@ -2,7 +2,7 @@ import time
 import uuid
 import requests
 
-from email import Email
+from .email import Email
 
 
 # Main class to access Mailosaur.com api.
@@ -19,7 +19,7 @@ class Mailosaur:
         if not search_criteria:
             search_criteria = dict()
         params = dict()
-        if isinstance(search_criteria, basestring):
+        if isinstance(search_criteria, str):
             params['search'] = search_criteria
         else:
             params = search_criteria
@@ -69,7 +69,7 @@ class Mailosaur:
         params = dict()
         params['key'] = self.api_key
         response = requests.get(self.base_url + '/attachments/' + attachment_id, params=params)
-        return response.text
+        return response.content
 
         # Retrieves the complete raw EML file for the rawId given. RawId is a property on the email object.
 

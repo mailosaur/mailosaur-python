@@ -1,7 +1,7 @@
 import dateutil.parser
-from email_address import EmailAddress
-from email_data import EmailData
-from attachment import Attachment
+from .email_address import EmailAddress
+from .email_data import EmailData
+from .attachment import Attachment
 
 
 class Email:
