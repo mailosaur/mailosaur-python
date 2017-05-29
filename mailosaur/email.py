@@ -1,3 +1,5 @@
+""" Email module """
+
 import dateutil.parser
 from .email_address import EmailAddress
 from .email_data import EmailData
@@ -5,6 +7,7 @@ from .attachment import Attachment
 
 
 class Email:
+    """ Mailosaur email class parsed from api response. """
     def __init__(self, data):
         self.id = data['id']
         self.creation_date = dateutil.parser.parse(data['creationdate'])
@@ -18,4 +21,8 @@ class Email:
         self.headers = data['headers']
         self.subject = data['subject']
         self.priority = data['priority']
-        self.attachments = [Attachment(a) for a in data['attachments']] if 'attachments' in data else None
+
+        if 'attachments' in data:
+            self.attachments = [Attachment(a) for a in data['attachments']]
+        else: 
+            self.attachements = None

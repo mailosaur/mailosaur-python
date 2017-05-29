@@ -1,21 +1,32 @@
-import time
+"""
+    mailosaur.com API library. Basic usage:
+
+    >>> from mailosaur.mailosaur import Mailosaur
+    >>> mailbox = Mailosaur("BOX_ID", "YOUR_API_KEY")
+    >>> emails = mailbox.get_emails()
+
+    More options at https://mailosaur.com/docs/email/
+"""
+
 import uuid
 import requests
 
 from .email import Email
 
+class Mailosaur(object):
+    """ Main class to access Mailosaur.com api. """
 
-# Main class to access Mailosaur.com api.
-class Mailosaur:
-    # Pass in your mailbox id and api key to authenticate
     def __init__(self, mailbox, api_key, base_url='https://mailosaur.com/api', smtp_host='mailosaur.io'):
+        """ Pass in your mailbox id and api key to authenticate """
         self.mailbox = mailbox
         self.api_key = api_key
         self.base_url = base_url
         self.smtp_host = smtp_host
 
-    # Retrieves all emails which have the searchPattern text in their body or subject.
     def get_emails(self, search_criteria=None, retries=10):
+        """ Retrieves all emails which have the searchPattern text
+            in their body or subject. """
+
         if not search_criteria:
             search_criteria = dict()
         params = dict()
@@ -27,60 +38,66 @@ class Mailosaur:
 
         emails = None
 
-        response = requests.get(self.base_url + '/mailboxes/' + self.mailbox + '/emails', params=params)
+        url = "%s/mailboxes/%s/emails" % (self.base_url, self.mailbox)
+        response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
         emails = [Email(k) for k in data]
 
         return emails
 
-    # Retrieves all emails sent to the given recipient.
     def get_emails_by_recipient(self, recipient_email):
+        """ Retrieves all emails sent to the given recipient. """
         params = dict()
         params['recipient'] = recipient_email
-        return self.get_emails(params,2)
+        return self.get_emails(params, 2)
 
-    # Retrieves the email with the given id.
     def get_email(self, email_id):
+        """ Retrieves the email with the given id. """
         params = dict()
         params['key'] = self.api_key
 
-        response = requests.get(self.base_url + '/emails/' + email_id, params=params)
+        url = "%s/emails/%s" % (self.base_url, email_id)
+        response = requests.get(url, params=params)
         response.raise_for_status()
         data = response.json()
         email = Email(data)
         return email
 
-    # Deletes all emails in a mailbox.
     def delete_all_email(self):
+        """  Deletes all emails in a mailbox. """
         params = dict()
         params['key'] = self.api_key
 
-        requests.post(self.base_url + '/mailboxes/' + self.mailbox + '/empty', None, params=params)
+        url = "%s/mailboxes/%s/empty" % (self.base_url, self.mailbox)
+        requests.post(url, None, params=params)
 
-    # Deletes the email with the given id.
     def delete_email(self, email_id):
+        """ Deletes the email with the given id. """
         params = dict()
         params['key'] = self.api_key
-        requests.post(self.base_url + '/emails/' + email_id + '/delete', None, params=params)
+        url = "%s/emails/%s/delete" % (self.base_url, email_id)
+        requests.post(url, None, params=params)
 
-    # Retrieves the attachment with specified id.
     def get_attachment(self, attachment_id):
+        """ Retrieves the attachment with specified id. """
         params = dict()
         params['key'] = self.api_key
-        response = requests.get(self.base_url + '/attachments/' + attachment_id, params=params)
+
+        url = "%s/attachments/%s" % (self.base_url, attachment_id)
+        response = requests.get(url, params=params)
         return response.content
 
-        # Retrieves the complete raw EML file for the rawId given. RawId is a property on the email object.
-
     def get_raw_email(self, raw_id):
+        """ Retrieves the complete raw EML file for the rawId given. RawId is a property on the email object. """
         params = dict()
         params['key'] = self.api_key
 
-        response = requests.get(self.base_url + '/raw/' + raw_id, params=params)
+        url = "%s/raw/%s" % (self.base_url, raw_id)
+        response = requests.get(url, params=params)
         return response.text
 
-        # Generates a random email address which can be used to send emails into the mailbox.
-
     def generate_email_address(self):
+        """ Generates a random email address which can be used to send emails into the mailbox. """
         return "%s.%s@%s" % (uuid.uuid4(), self.mailbox, "mailosaur.io")
+

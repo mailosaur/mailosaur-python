@@ -1,6 +1,8 @@
 from .image import Image
 from .link import Link
+
 class EmailData:
+    """ Email data: links, body and images. """
     def __init__(self, data):
         self.links = [Link(l) for l in data['links']] if 'links' in data else None
         self.body = data['body']
