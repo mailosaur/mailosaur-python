@@ -140,7 +140,6 @@ class MailosaurTest(TestCase):
 
         # attachments:
         self.assertEqual(2, len(email.attachments), 'there should be 2 attachments')
-
         # attachment 1:
         attachment1 = email.attachments[0]
         self.assertIsNotNone(attachment1.id)
@@ -195,7 +194,6 @@ class MailosaurTest(TestCase):
         fp.close()
         img.add_header('Content-Disposition', 'attachment', filename='logo-m-circle-sm.png')
         msg.attach(img)
-
         smtp = smtplib.SMTP()
         smtp.connect(self.smtp_host, self.smtp_port)
         smtp.sendmail(from_address, to_address, msg.as_string())
