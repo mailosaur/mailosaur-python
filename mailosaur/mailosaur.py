@@ -1,7 +1,7 @@
 """
     mailosaur.com API library. Basic usage:
 
-    >>> from mailosaur.mailosaur import Mailosaur
+    >>> from mailosaur import Mailosaur
     >>> mailbox = Mailosaur("BOX_ID", "YOUR_API_KEY")
     >>> emails = mailbox.get_emails()
 

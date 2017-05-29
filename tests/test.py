@@ -17,6 +17,9 @@ class MailosaurTest(TestCase):
         self.smtp_port = os.environ.get("MAILOSAUR_SMTP_PORT") or 25
         self.mailbox = Mailosaur(mailbox_id, api_key, base_url, self.smtp_host)
 
+    def tearDown(self):
+        self.mailbox.delete_all_email()
+
     def test_get_emails(self):
         # ensure mailbox is empty to prevent picking up previous test emails:
         self.mailbox.delete_all_email()
