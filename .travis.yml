@@ -1,8 +1,8 @@
 language: python
 python:
-  - '2.7'
-  - '3.5'
-  - '3.6'
+- '2.7'
+- '3.5'
+- '3.6'
 script: nosetests
 env:
   global:
@@ -12,3 +12,12 @@ env:
   - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
 notifications:
   slack: mailosaur:CsJ9RruwjqHPKr1Iugk8GDtX
+deploy:
+  provider: pypi
+  user: Mailosaur
+  password:
+    secure: Mfpm2lmGSPAKK017DndwTedZhkH/h/9U+1XptsqQMOf2TNra2aBEFgZB7v8859Ngg8xMq20lAlFnNqZvTIEO3wQr8ft1MSr6AV2iq6BPoFOvm1q3Rn6u7gdkYbvXE2REVfRjzRyZk9hcm4meplb/NPI4SsVv6VYS5vNFB1nm7ZU=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: mailosaur/mailosaur-python
