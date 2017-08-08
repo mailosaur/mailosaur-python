@@ -16,8 +16,8 @@ class Email:
         self.to_address = [EmailAddress(k) for k in data['to']]
         self.mailbox = data['mailbox']
         self.raw_id = data.get('rawId', data.get('rawid', None))
-        self.html = EmailData(data['html']) if 'html' in data else None
-        self.text = EmailData(data['text']) if 'text' in data else None
+        self.html = EmailData(data['html']) if ('html' in data and data['html'] is not None) else None
+        self.text = EmailData(data['text']) if ('text' in data and data['text'] is not None) else None
         self.headers = data['headers']
         self.subject = data['subject']
         self.priority = data['priority']
