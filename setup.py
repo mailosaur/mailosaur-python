@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='mailosaur',
-      version='3.0.3',
+      version='3.0.4',
       description='Python client library for Mailosaur',
       url='https://mailosaur.com',
       author='Mailosaur Ltd',
