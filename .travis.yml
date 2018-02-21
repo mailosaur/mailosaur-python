@@ -1,23 +1,22 @@
 language: python
 python:
 - '2.7'
-- '3.5'
 - '3.6'
 script: nosetests
 env:
   global:
-  - secure: dGISwfg6yRMlhKoAv7WFXZxRvMhCPYDITdMnJ+6P/BYHpodHaijEusdpR8IadVur8kDzvm6Arw47w/unphuyGa4S30D43iSFtBm6URFeFwEKx0t88hYAE9W4KZdNH5wQA86FVgQXGBItNlkA5c7E8XcpyrKJ1pngzUUIgRhevuk=
+  - secure: jBBn9VWtUqN9IRKGfbRs/vXG+A8ar5RWKOfYSWeuGdKKB/eVLO6wgFh1THFNKZlcwpLbmnDWdQWuywdN8fTUsJJeG/qwJb6LnCU5P8j8BrUPrphyF9btN2dqgw/BmFdWB7Jr/oYDmvQHU55HZGCeKj0nX6IY4qRH/aPCXpX1NGM=
   matrix:
-  - MAILOSAUR_BASE_URL=https://mailosaur.com/api/ MAILOSAUR_SMTP_HOST=mailosaur.io
-  - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
+  - MAILOSAUR_BASE_URL=https://mailosaur.com/ MAILOSAUR_SMTP_HOST=mailosaur.io
+  - MAILOSAUR_BASE_URL=https://next.mailosaur.com/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
 notifications:
   slack: mailosaur:CsJ9RruwjqHPKr1Iugk8GDtX
 deploy:
   provider: pypi
   user: Mailosaur
   password:
-    secure: Mfpm2lmGSPAKK017DndwTedZhkH/h/9U+1XptsqQMOf2TNra2aBEFgZB7v8859Ngg8xMq20lAlFnNqZvTIEO3wQr8ft1MSr6AV2iq6BPoFOvm1q3Rn6u7gdkYbvXE2REVfRjzRyZk9hcm4meplb/NPI4SsVv6VYS5vNFB1nm7ZU=
+    secure: X+1AvVZepIR6ucQR5K83CGPCztga/P3s0TUEDg8u9x2LZU2KVbeUbMAKOdNIjnNRYmjosigYBo5RRxklLR7DalD8kUDmiqbtXyX8nHvrpss96niBbzPawsT4S3RbaNXoEPLl1+DKbEirHk0KeAC5FgC5h4fcI3vH1Jc9qtf/bt4=
   on:
     tags: true
     distributions: sdist bdist_wheel
-    repo: mailosaur/mailosaur-python
+  
