@@ -25,6 +25,7 @@ class MailosaurException(Exception):
     def __init__(self, response):
         message = "Operation returned an invalid status code '%s'" % (response.reason)
         super(MailosaurException, self).__init__(message)
+        self.message = message
 
         if response.status_code in [400]:
             data = json.loads(response._content)
