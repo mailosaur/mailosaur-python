@@ -18,12 +18,13 @@ class MailosaurError:
         self.model = data.get('model', None)
 
 
-class MailosaurException:
+class MailosaurException(Exception):
     """Server responsed with exception of type: 'MailosaurError'.
     """
 
     def __init__(self, response):
-        self.message = "Operation returned an invalid status code '%s'" % (response.reason)
+        message = "Operation returned an invalid status code '%s'" % (response.reason)
+        super(MailosaurException, self).__init__(message)
 
         if response.status_code in [400]:
             data = json.loads(response._content)
