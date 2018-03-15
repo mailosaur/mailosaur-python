@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='mailosaur',
-      version='5.0.2',
+      version='5.0.3',
       description='Python client library for Mailosaur',
       url='https://mailosaur.com',
       author='Mailosaur Ltd',
@@ -10,7 +10,9 @@ setup(name='mailosaur',
       license='MIT',
       packages=['mailosaur'],
       install_requires=[
-          'msrestazure'
+          'python-dateutil',
+          'requests',
+          'requests[security]'
       ],
-      zip_safe=False, requires=['msrestazure'])
+      zip_safe=False, requires=['requests', None))
 
