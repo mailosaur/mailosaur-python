@@ -14,5 +14,5 @@ setup(name='mailosaur',
           'requests',
           'requests[security]'
       ],
-      zip_safe=False, requires=['requests', None))
+      zip_safe=False, requires=['requests'])
 
