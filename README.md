@@ -7,7 +7,7 @@
 ## Installation
 
 ```
-pip install mailosaur
+pip install --upgrade mailosaur
 ```
 
 ## Documentation and usage examples
