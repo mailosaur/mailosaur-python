@@ -29,7 +29,7 @@ class ServersOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/servers" % (self.base_url)
+        url = "%sapi/servers" % (self.base_url)
         response = self.session.get(url)
         
         if response.status_code not in [200]:
@@ -51,7 +51,7 @@ class ServersOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/servers" % (self.base_url)
+        url = "%sapi/servers" % (self.base_url)
         response = self.session.post(url, json=server_create_options.__dict__)
         
         if response.status_code not in [200]:
@@ -74,7 +74,7 @@ class ServersOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/servers/%s" % (self.base_url, id)
+        url = "%sapi/servers/%s" % (self.base_url, id)
         response = self.session.get(url)
 
         if response.status_code not in [200]:
@@ -100,7 +100,7 @@ class ServersOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/servers/%s" % (self.base_url, id)
+        url = "%sapi/servers/%s" % (self.base_url, id)
         response = self.session.put(url, json=server.__dict__)
         
         if response.status_code not in [200]:
@@ -124,7 +124,7 @@ class ServersOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/servers/%s" % (self.base_url, id)
+        url = "%sapi/servers/%s" % (self.base_url, id)
         response = self.session.delete(url)
         
         if response.status_code not in [204]:

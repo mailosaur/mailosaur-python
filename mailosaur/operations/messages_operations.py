@@ -23,7 +23,7 @@ class MessagesOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/messages/%s" % (self.base_url, id)
+        url = "%sapi/messages/%s" % (self.base_url, id)
         response = self.session.get(url)
         
         if response.status_code not in [200]:
@@ -46,7 +46,7 @@ class MessagesOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/messages/%s" % (self.base_url, id)
+        url = "%sapi/messages/%s" % (self.base_url, id)
         response = self.session.delete(url)
         
         if response.status_code not in [204]:
@@ -72,7 +72,7 @@ class MessagesOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/messages" % (self.base_url)
+        url = "%sapi/messages" % (self.base_url)
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page}
         response = self.session.get(url, params=params)
         
@@ -97,7 +97,7 @@ class MessagesOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/messages" % (self.base_url)
+        url = "%sapi/messages" % (self.base_url)
         params = {'server': server}
         response = self.session.delete(url, params=params)
         
@@ -126,7 +126,7 @@ class MessagesOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/messages/search" % (self.base_url)
+        url = "%sapi/messages/search" % (self.base_url)
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page}
         response = self.session.post(url, params=params, json=criteria.toJSON())
 
@@ -152,7 +152,7 @@ class MessagesOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/messages/await" % (self.base_url)
+        url = "%sapi/messages/await" % (self.base_url)
         params = {'server': server}
         response = self.session.post(url, params=params, json=criteria.__dict__)
         

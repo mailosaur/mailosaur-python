@@ -21,7 +21,7 @@ class FilesOperations(object):
         :raises:
          :class:`HttpOperationError<msrest.exceptions.HttpOperationError>`
         """
-        url = "%s/api/files/attachments/%s" % (self.base_url, id)
+        url = "%sapi/files/attachments/%s" % (self.base_url, id)
         response = self.session.get(url, stream=True)
         
         if response.status_code not in [200]:
@@ -42,7 +42,7 @@ class FilesOperations(object):
         :raises:
          :class:`HttpOperationError<msrest.exceptions.HttpOperationError>`
         """
-        url = "%s/api/files/email/%s" % (self.base_url, id)
+        url = "%sapi/files/email/%s" % (self.base_url, id)
         response = self.session.get(url, stream=True)
         
         if response.status_code not in [200]:

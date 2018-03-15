@@ -21,7 +21,7 @@ class AnalysisOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%s/api/analysis/spam/%s" % (self.base_url, email)
+        url = "%sapi/analysis/spam/%s" % (self.base_url, email)
         response = self.session.get(url)
         
         if response.status_code not in [200]:

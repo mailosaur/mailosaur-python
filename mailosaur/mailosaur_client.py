@@ -19,7 +19,7 @@ from .operations.files_operations import FilesOperations
 class MailosaurClient(object):
     """ Main class to access Mailosaur.com api. """
 
-    def __init__(self, api_key, base_url="https://mailosaur.com"):
+    def __init__(self, api_key, base_url="https://mailosaur.com/"):
         """ Pass in your mailbox id and api key to authenticate """
         session = requests.Session()
         session.auth = (api_key, '')
