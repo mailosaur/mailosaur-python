@@ -37,14 +37,14 @@ class Message(object):
 
     def __init__(self, data):
         self.id = data.get('id', None)
-        self.sender = [MessageAddress(i) for i in data.get('from', list)]
-        self.to = [MessageAddress(i) for i in data.get('to', list)]
-        self.cc = [MessageAddress(i) for i in data.get('cc', list)]
-        self.bcc = [MessageAddress(i) for i in data.get('bcc', list)]
+        self.sender = [MessageAddress(i) for i in data.get('from', [])]
+        self.to = [MessageAddress(i) for i in data.get('to', [])]
+        self.cc = [MessageAddress(i) for i in data.get('cc', [])]
+        self.bcc = [MessageAddress(i) for i in data.get('bcc', [])]
         self.received = dateutil.parser.parse(data.get('received', None))
         self.subject = data.get('subject', None)
         self.html = MessageContent(data.get('html', None))
         self.text = MessageContent(data.get('text', None))
-        self.attachments = [Attachment(i) for i in data.get('attachments', list)]
+        self.attachments = [Attachment(i) for i in data.get('attachments', [])]
         self.metadata = Metadata(data.get('metadata', None))
         self.server = data.get('server', None)

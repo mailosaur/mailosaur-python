@@ -8,4 +8,4 @@ class Metadata(object):
     """
 
     def __init__(self, data=dict):
-        self.headers = [MessageHeader(i) for i in data.get('headers', list)]
+        self.headers = [MessageHeader(i) for i in data.get('headers', [])]

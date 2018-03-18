@@ -9,7 +9,7 @@ class MessageAddress(object):
     :type phone: str
     """
 
-    def __init__(self, data=dict):
+    def __init__(self, data=None):
         self.name = data.get('name', None)
         self.email = data.get('email', None)
         self.phone = data.get('phone', None)

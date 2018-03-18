@@ -26,4 +26,4 @@ class Server(object):
         self.name = data.get('name', None)
         self.users = data.get('users', None)
         self.messages = data.get('messages', None)
-        self.forwarding_rules = [ForwardingRule(i) for i in data.get('forwardingRules', list)]
+        self.forwarding_rules = [ForwardingRule(i) for i in data.get('forwardingRules', [])]

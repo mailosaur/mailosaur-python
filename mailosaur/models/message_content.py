@@ -13,7 +13,7 @@ class MessageContent(object):
     """
 
     def __init__(self, data=dict):
-        self.links = [Link(i) for i in data.get('links', list)]
+        self.links = [Link(i) for i in data.get('links', [])]
 
         images = data.get('images', None)
         if isinstance(images, list):
