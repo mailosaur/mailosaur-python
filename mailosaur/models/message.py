@@ -35,7 +35,10 @@ class Message(object):
     :type server: str
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.id = data.get('id', None)
         self.sender = [MessageAddress(i) for i in data.get('from', [])]
         self.to = [MessageAddress(i) for i in data.get('to', [])]

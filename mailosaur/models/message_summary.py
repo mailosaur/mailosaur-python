@@ -28,7 +28,10 @@ class MessageSummary(object):
     :type attachments: int
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.id = data.get('id', None)
         self.server = data.get('server', None)
         self.sender = [MessageAddress(i) for i in data.get('from', [])]

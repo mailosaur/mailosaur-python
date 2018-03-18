@@ -7,5 +7,8 @@ class Metadata(object):
     :type headers: list[~mailosaur.models.MessageHeader]
     """
 
-    def __init__(self, data=dict):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.headers = [MessageHeader(i) for i in data.get('headers', [])]

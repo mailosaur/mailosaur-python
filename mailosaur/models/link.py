@@ -7,6 +7,9 @@ class Link(object):
     :type text: str
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+            
         self.href = data.get('href', None)
         self.text = data.get('text', None)

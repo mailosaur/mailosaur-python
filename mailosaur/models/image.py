@@ -7,6 +7,9 @@ class Image(object):
     :type alt: str
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+            
         self.src = data.get('src', None)
         self.alt = data.get('alt', None)

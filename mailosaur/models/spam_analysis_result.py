@@ -9,6 +9,9 @@ class SpamAnalysisResult(object):
     :type score: float
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.spam_filter_results = SpamFilterResults(data.get('spamFilterResults', None))
         self.score = data.get('score', 0.0)

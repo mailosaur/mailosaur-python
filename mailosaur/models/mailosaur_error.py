@@ -12,7 +12,10 @@ class MailosaurError:
     :type model: object
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.type = data.get('type', None)
         self.messages = data.get('messages', None)
         self.model = data.get('model', None)

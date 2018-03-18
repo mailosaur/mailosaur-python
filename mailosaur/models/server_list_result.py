@@ -7,5 +7,8 @@ class ServerListResult(object):
     :type items: list[~mailosaur.models.Server]
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.items = data.get('items', None)

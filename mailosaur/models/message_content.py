@@ -12,7 +12,10 @@ class MessageContent(object):
     :type body: str
     """
 
-    def __init__(self, data=dict):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.links = [Link(i) for i in data.get('links', [])]
 
         images = data.get('images', None)

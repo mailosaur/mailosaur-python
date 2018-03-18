@@ -15,7 +15,10 @@ class Attachment(object):
     :type url: str
     """
 
-    def __init__(self, data=dict):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.id = data.get('id', None)
         self.content_type = data.get('contentType', None)
         self.file_name = data.get('fileName', None)

@@ -10,6 +10,9 @@ class MessageAddress(object):
     """
 
     def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.name = data.get('name', None)
         self.email = data.get('email', None)
         self.phone = data.get('phone', None)

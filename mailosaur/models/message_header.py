@@ -7,6 +7,9 @@ class MessageHeader(object):
     :type value: str
     """
 
-    def __init__(self, data=dict):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.field = data.get('field', None)
         self.value = data.get('value', None)

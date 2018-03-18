@@ -20,7 +20,10 @@ class Server(object):
     :type forwarding_rules: list[~mailosaur.models.ForwardingRule]
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.id = data.get('id', None)
         self.password = data.get('password', None)
         self.name = data.get('name', None)

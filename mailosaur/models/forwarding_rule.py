@@ -12,7 +12,10 @@ class ForwardingRule(object):
     :type forward_to: str
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+            
         self.field = data.get('field', None)
         self.operator = data.get('operator', None)
         self.value = data.get('value', None)

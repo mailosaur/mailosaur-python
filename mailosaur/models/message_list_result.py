@@ -9,5 +9,8 @@ class MessageListResult(object):
     :type items: list[~mailosaur.models.MessageSummary]
     """
 
-    def __init__(self, data):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.items = [MessageSummary(i) for i in data.get('items', None)]

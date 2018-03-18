@@ -9,7 +9,10 @@ class SpamAssassinRule(object):
     :type description: str
     """
 
-    def __init__(self, data=dict):
+    def __init__(self, data=None):
+        if data is None:
+            data = {}
+
         self.score = data.get('score', 0.0)
         self.rule = data.get('rule', None)
         self.description = data.get('description', None)
