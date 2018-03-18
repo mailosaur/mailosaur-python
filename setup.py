@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='mailosaur',
-      version='5.0.4',
+      version='5.0.5',
       description='Python client library for Mailosaur',
       url='https://mailosaur.com',
       author='Mailosaur Ltd',
