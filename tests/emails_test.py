@@ -50,6 +50,13 @@ class EmailsTest(TestCase):
         email = self.client.messages.wait_for(self.server, criteria)
         self.validate_email(email)
 
+    def test_wait_for_timeout(self):
+        criteria = SearchCriteria()
+        criteria.sent_to = 'non_existing@email_address.com'
+        
+        with self.assertRaises(MailosaurException):
+            self.client.messages.wait_for(self.server, criteria, 2)
+
     def test_search_no_criteria_error(self):
         with self.assertRaises(MailosaurException):
             self.client.messages.search(self.server, SearchCriteria())

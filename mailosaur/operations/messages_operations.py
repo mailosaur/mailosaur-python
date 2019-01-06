@@ -1,3 +1,6 @@
+import requests
+from datetime import datetime, timedelta
+from time import sleep
 from ..models import MessageListResult
 from ..models import Message
 from ..models import MailosaurException
@@ -137,8 +140,8 @@ class MessagesOperations(object):
 
         return MessageListResult(data)
 
-    def wait_for(self, server, criteria):
-        """Wait for a specific message.
+    def wait_for(self, server, criteria, timeout=15):
+        """Wait for a specific message until timeout is reached.
 
         Returns as soon as a message matching the specified search criteria is
         found. This is the most efficient method of looking up a message.
@@ -146,19 +149,27 @@ class MessagesOperations(object):
         :param server: The identifier of the server hosting the message.
         :type server: str
         :param criteria: The search criteria to use in order to find a match.
-        :type criteria: ~mailosaur.models.SearchCriteria        
+        :type criteria: ~mailosaur.models.SearchCriteria       
+        :param timeout: Timeout in seconds (15s default).
+        :type timeout: int
         :return: Message
         :rtype: ~mailosaur.models.Message
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%sapi/messages/await" % (self.base_url)
-        params = {'server': server}
-        response = self.session.post(url, params=params, json=criteria.__dict__)
-        
-        if response.status_code not in [200]:
-            raise MailosaurException(response)
-            
-        data = response.json()
+        timeout_datetime = datetime.now() + timedelta(seconds=timeout)
 
-        return Message(data)
+        while datetime.now() < timeout_datetime:
+            message_list = self.search(server, criteria)
+
+            if len(message_list.items) > 0:
+                message_id = message_list.items[0].id
+                return self.get(message_id)
+
+            sleep(1)
+    
+        error_response = requests.models.Response()
+        error_response.reason = "Wait for message timeout reached."
+        error_response.status = 404
+
+        raise MailosaurException(error_response)
