@@ -140,7 +140,7 @@ class MessagesOperations(object):
 
         return MessageListResult(data)
 
-    def wait_for(self, server, criteria, timeout=15):
+    def wait_for(self, server, criteria, timeout=2):
         """Wait for a specific message until timeout is reached.
 
         Returns as soon as a message matching the specified search criteria is
