@@ -140,7 +140,7 @@ class MessagesOperations(object):
 
         return MessageListResult(data)
 
-    def wait_for(self, server, criteria, timeout=2):
+    def wait_for(self, server, criteria, timeout=15):
         """Wait for a specific message until timeout is reached.
 
         Returns as soon as a message matching the specified search criteria is
@@ -166,7 +166,7 @@ class MessagesOperations(object):
                 message_id = message_list.items[0].id
                 return self.get(message_id)
 
-            sleep(1)
+            sleep(2)
     
         error_response = requests.models.Response()
         error_response.reason = "Wait for message timeout reached."
