@@ -15,9 +15,6 @@ class Mailer(object):
     def send_emails(client, server, quantity):
         for i in range(0, quantity):
             Mailer.send_email(client, server)
-        
-        # Wait to ensure email has arrived
-        time.sleep(2)
 
     @staticmethod
     def send_email(client, server, send_to_address = None):
