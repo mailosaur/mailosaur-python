@@ -23,7 +23,7 @@ class MailosaurClient(object):
         """ Pass in your mailbox id and api key to authenticate """
         session = requests.Session()
         session.auth = (api_key, '')
-        session.headers.update({'User-Agent': 'mailosaur-python/5.0.5'})
+        session.headers.update({'User-Agent': 'mailosaur-python/5.0.0'})
 
         self.servers = ServersOperations(session, base_url)
         self.messages = MessagesOperations(session, base_url)
