@@ -1,3 +1,5 @@
+import time
+from datetime import datetime, timedelta
 from ..models import MessageListResult
 from ..models import Message
 from ..models import MailosaurException
@@ -10,7 +12,33 @@ class MessagesOperations(object):
         self.session = session
         self.base_url = base_url
 
-    def get(self, id):
+    def get(self, server, criteria, timeout=10000, received_after=(datetime.today() - timedelta(hours=1))):
+        """Retrieve a message using search criteria.
+
+        Returns as soon as a message matching the specified search criteria is
+        found. This is the most efficient method of looking up a message.
+
+        :param server: The identifier of the server hosting the message.
+        :type server: str
+        :param criteria: The search criteria to use in order to find a match.
+        :type criteria: ~mailosaur.models.SearchCriteria      
+        :param timeout: Specify how long to wait for a matching result (in milliseconds).
+        :type timeout: int
+        :param received_after: Limits results to only messages received after this date/time.
+        :type received_after: datetime  
+        :return: Message
+        :rtype: ~mailosaur.models.Message
+        :raises:
+         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        """
+        # Defaults timeout to 10s, receivedAfter to 1h
+        if len(server) > 8:
+            raise Exception("Use get_by_id to retrieve a message using its identifier")
+
+        result = self.search(server, criteria, 0, 1, timeout, received_after)
+        return self.get_by_id(result.items[0].id)
+
+    def get_by_id(self, id):
         """Retrieve a message.
 
         Retrieves the detail for a single email message. Simply supply the
@@ -104,7 +132,7 @@ class MessagesOperations(object):
         if response.status_code not in [204]:
             raise MailosaurException(response)
 
-    def search(self, server, criteria, page=None, items_per_page=None):
+    def search(self, server, criteria, page=None, items_per_page=None, timeout=None, received_after=None):
         """Search for messages.
 
         Returns a list of messages matching the specified search criteria, in
@@ -120,45 +148,43 @@ class MessagesOperations(object):
         :type page: int
         :param items_per_page: A limit on the number of results to be returned
          per page. Can be set between 1 and 1000 items, the default is 50.
-        :type items_per_page: int        
+        :type items_per_page: int
+        :param timeout: Specify how long to wait for a matching result (in milliseconds).
+        :type timeout: int
+        :param received_after: Limits results to only messages received after this date/time.
+        :type received_after: datetime
         :return: MessageListResult
         :rtype: ~mailosaur.models.MessageListResult
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages/search" % (self.base_url)
-        params = {'server': server, 'page': page, 'itemsPerPage': items_per_page}
-        response = self.session.post(url, params=params, json=criteria.toJSON())
+        params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
 
-        if response.status_code not in [200]:
-            raise MailosaurException(response)
+        poll_count = 0
+        start_time = datetime.today()
 
-        data = response.json()
+        while True:
+            response = self.session.post(url, params=params, json=criteria.toJSON())
 
-        return MessageListResult(data)
-
-    def wait_for(self, server, criteria):
-        """Wait for a specific message.
-
-        Returns as soon as a message matching the specified search criteria is
-        found. This is the most efficient method of looking up a message.
-
-        :param server: The identifier of the server hosting the message.
-        :type server: str
-        :param criteria: The search criteria to use in order to find a match.
-        :type criteria: ~mailosaur.models.SearchCriteria        
-        :return: Message
-        :rtype: ~mailosaur.models.Message
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
-        """
-        url = "%sapi/messages/await" % (self.base_url)
-        params = {'server': server}
-        response = self.session.post(url, params=params, json=criteria.__dict__)
-        
-        if response.status_code not in [200]:
-            raise MailosaurException(response)
+            if response.status_code not in [200]:
+                raise MailosaurException(response)
             
-        data = response.json()
+            data = response.json()
 
-        return Message(data)
+            result = MessageListResult(data)
+
+            if timeout == 0 or len(result.items) != 0:
+                return result
+            
+            delay_pattern = map(int, (response.headers.get('x-ms-delay') or '1000').split(','))
+
+            delay = delay_pattern[len(delay_pattern) - 1] if poll_count >= len(delay_pattern) else delay_pattern[poll_count]
+            
+            poll_count += 1
+
+            ## Stop if timeout will be exceeded
+            if ((1000 * (datetime.today() - start_time).total_seconds()) + delay) > timeout:
+                raise Exception("No matching messages were found in time")
+
+            time.sleep(delay / 1000)

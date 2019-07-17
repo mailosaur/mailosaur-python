@@ -25,7 +25,7 @@ class EmailsTest(TestCase):
 
         criteria = SearchCriteria()
         criteria.sent_to = test_email_address
-        cls.email = cls.client.messages.wait_for(cls.server, criteria)
+        cls.email = cls.client.messages.get(cls.server, criteria)
 
     def test_get_email(self):
         result = self.client.files.get_email(self.email.id)
