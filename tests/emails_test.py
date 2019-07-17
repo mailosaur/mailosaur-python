@@ -30,16 +30,6 @@ class EmailsTest(TestCase):
             self.validate_email_summary(email)
 
     def test_get(self):
-        email_to_retrieve = self.emails[0]
-        email = self.client.messages.get(email_to_retrieve.id)
-        self.validate_email(email)
-        self.validate_headers(email)
-
-    def test_get_not_found(self):
-        with self.assertRaises(MailosaurException):
-            self.client.messages.get("efe907e9-74ed-4113-a3e0-a3d41d914765")
-
-    def test_wait_for(self):
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.io')
         test_email_address = "wait_for_test.%s@%s" % (self.server, host)
 
@@ -47,8 +37,18 @@ class EmailsTest(TestCase):
 
         criteria = SearchCriteria()
         criteria.sent_to = test_email_address
-        email = self.client.messages.wait_for(self.server, criteria)
+        email = self.client.messages.get(self.server, criteria)
         self.validate_email(email)
+
+    def test_get(self):
+        email_to_retrieve = self.emails[0]
+        email = self.client.messages.get_by_id(email_to_retrieve.id)
+        self.validate_email(email)
+        self.validate_headers(email)
+
+    def test_get_not_found(self):
+        with self.assertRaises(MailosaurException):
+            self.client.messages.get_by_id("efe907e9-74ed-4113-a3e0-a3d41d914765")
 
     def test_search_no_criteria_error(self):
         with self.assertRaises(MailosaurException):
