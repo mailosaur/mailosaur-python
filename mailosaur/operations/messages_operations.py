@@ -174,7 +174,7 @@ class MessagesOperations(object):
 
             result = MessageListResult(data)
 
-            if timeout == 0 or len(result.items) != 0:
+            if timeout is None or timeout == 0 or len(result.items) != 0:
                 return result
             
             delay_pattern = map(int, (response.headers.get('x-ms-delay') or '1000').split(','))
