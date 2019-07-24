@@ -177,7 +177,9 @@ class MessagesOperations(object):
             if timeout is None or timeout == 0 or len(result.items) != 0:
                 return result
             
-            delay_pattern = map(int, (response.headers.get('x-ms-delay') or '1000').split(','))
+            # List conversion necessary for Python 3 compatibility
+            # https://stackoverflow.com/questions/36982858/object-of-type-map-has-no-len-in-python-3
+            delay_pattern = list(map(int, (response.headers.get('x-ms-delay') or '1000').split(',')))
 
             delay = delay_pattern[len(delay_pattern) - 1] if poll_count >= len(delay_pattern) else delay_pattern[poll_count]
             
