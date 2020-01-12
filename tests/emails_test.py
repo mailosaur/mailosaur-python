@@ -90,6 +90,32 @@ class EmailsTest(TestCase):
         self.assertEqual(target_email.to[0].email, results[0].to[0].email)
         self.assertEqual(target_email.subject, results[0].subject)
 
+    def test_search_match_unspecified(self):
+        target_email = self.emails[1]
+        criteria = SearchCriteria()
+        criteria.sent_to = target_email.to[0].email
+        criteria.body = "this is a test"
+        results = self.client.messages.search(self.server, criteria).items
+        self.assertEqual(1, len(results))
+
+    def test_search_match_all(self):
+        target_email = self.emails[1]
+        criteria = SearchCriteria()
+        criteria.sent_to = target_email.to[0].email
+        criteria.body = "this is a test"
+        criteria.match = "all"
+        results = self.client.messages.search(self.server, criteria).items
+        self.assertEqual(1, len(results))
+
+    def test_search_match_any(self):
+        target_email = self.emails[1]
+        criteria = SearchCriteria()
+        criteria.sent_to = target_email.to[0].email
+        criteria.body = "this is a test"
+        criteria.match = "any"
+        results = self.client.messages.search(self.server, criteria).items
+        self.assertEqual(6, len(results))
+
     def test_spam_analysis(self):
         target_id = self.emails[0].id
         result = self.client.analysis.spam(target_id)
