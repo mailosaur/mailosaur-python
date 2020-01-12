@@ -24,6 +24,6 @@ class SearchCriteria(object):
         return {
             'sentTo': self.sent_to,
             'subject': self.subject,
-            'body': self.body
+            'body': self.body,
             'match': self.match
         }
