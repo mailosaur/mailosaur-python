@@ -80,7 +80,7 @@ class MessagesOperations(object):
         if response.status_code not in [204]:
             raise MailosaurException(response)
 
-    def list(self, server, page=None, items_per_page=None):
+    def list(self, server, page=None, items_per_page=None, received_after=None):
         """List all messages.
 
         Returns a list of your messages in summary form. The summaries are
@@ -94,16 +94,18 @@ class MessagesOperations(object):
         :type page: int
         :param items_per_page: A limit on the number of results to be returned
          per page. Can be set between 1 and 1000 items, the default is 50.
-        :type items_per_page: int        
+        :type items_per_page: int
+        :param received_after: Limits results to only messages received after this date/time.
+        :type received_after: datetime
         :return: MessageListResult
         :rtype: ~mailosaur.models.MessageListResult
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages" % (self.base_url)
-        params = {'server': server, 'page': page, 'itemsPerPage': items_per_page}
+        params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
         response = self.session.get(url, params=params)
-        
+
         if response.status_code not in [200]:
             raise MailosaurException(response)
 
