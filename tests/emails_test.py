@@ -28,6 +28,10 @@ class EmailsTest(TestCase):
 
         for email in self.emails:
             self.validate_email_summary(email)
+    
+    def test_list_received_after(self):
+        future_emails = self.client.messages.list(self.server, received_after=datetime.today()).items
+        self.assertEqual(0, len(future_emails))
 
     def test_get(self):
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.io')
