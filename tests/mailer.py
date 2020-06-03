@@ -16,6 +16,9 @@ class Mailer(object):
         for i in range(0, quantity):
             Mailer.send_email(client, server)
 
+        # Allow 2 seconds for any SMTP processing
+        time.sleep(2)
+
     @staticmethod
     def send_email(client, server, send_to_address = None):
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.io')
