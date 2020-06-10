@@ -1,4 +1,5 @@
 import time
+from tzlocal import get_localzone
 from datetime import datetime, timedelta
 from ..models import MessageListResult
 from ..models import Message
@@ -11,6 +12,7 @@ class MessagesOperations(object):
     def __init__(self, session, base_url):
         self.session = session
         self.base_url = base_url
+        self.timezone = get_localzone()
 
     def get(self, server, criteria, timeout=10000, received_after=(datetime.today() - timedelta(hours=1))):
         """Retrieve a message using search criteria.
@@ -103,6 +105,10 @@ class MessagesOperations(object):
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages" % (self.base_url)
+
+        if received_after is not None:
+            received_after = self.timezone.localize(received_after).isoformat()
+
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
         response = self.session.get(url, params=params)
         
@@ -161,6 +167,10 @@ class MessagesOperations(object):
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages/search" % (self.base_url)
+
+        if received_after is not None:
+            received_after = self.timezone.localize(received_after).isoformat()
+
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
 
         poll_count = 0

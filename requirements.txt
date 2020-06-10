@@ -1,3 +1,4 @@
 nose
 requests
+tzlocal
 python-dateutil
