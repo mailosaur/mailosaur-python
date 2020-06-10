@@ -30,7 +30,7 @@ class EmailsTest(TestCase):
             self.validate_email_summary(email)
     
     def test_list_received_after(self):
-        past_date = datetime.today() - timedelta(minutes=5)
+        past_date = datetime.today() - timedelta(minutes=10)
         past_emails = self.client.messages.list(self.server, received_after=past_date).items
         self.assertTrue(len(past_emails) > 0)
         
