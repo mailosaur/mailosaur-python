@@ -123,6 +123,7 @@ class EmailsTest(TestCase):
         
     def validate_email_summary(self, email):
         self.validate_metadata(email)
+        self.assertIsNotNone(email.summary)
         self.assertEqual(2, email.attachments)
 
     def validate_html(self, email):
