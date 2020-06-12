@@ -11,6 +11,7 @@ setup(name='mailosaur',
       packages=find_packages(),
       install_requires=[
           'python-dateutil',
+          'tzlocal',
           'requests',
           'requests[security]'
       ],
