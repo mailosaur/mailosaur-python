@@ -5,9 +5,10 @@ class AnalysisOperations(object):
     """AnalysisOperations operations.
     """
 
-    def __init__(self, session, base_url):
+    def __init__(self, session, base_url, handle_http_error):
         self.session = session
         self.base_url = base_url
+        self.handle_http_error = handle_http_error
 
     def spam(self, email):
         """Perform a spam test.
@@ -25,7 +26,8 @@ class AnalysisOperations(object):
         response = self.session.get(url)
         
         if response.status_code not in [200]:
-            raise MailosaurException(response)
+            self.handle_http_error(response)
+            return
 
         data = response.json()
 

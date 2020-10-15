@@ -15,6 +15,7 @@ from .operations.servers_operations import ServersOperations
 from .operations.messages_operations import MessagesOperations
 from .operations.analysis_operations import AnalysisOperations
 from .operations.files_operations import FilesOperations
+from .models.mailosaur_exception import MailosaurException
 
 class MailosaurClient(object):
     """ Main class to access Mailosaur.com api. """
@@ -23,9 +24,21 @@ class MailosaurClient(object):
         """ Pass in your mailbox id and api key to authenticate """
         session = requests.Session()
         session.auth = (api_key, '')
-        session.headers.update({'User-Agent': 'mailosaur-python/6.0.0'})
+        session.headers.update({'User-Agent': 'mailosaur-python/7.0.0'})
 
-        self.servers = ServersOperations(session, base_url)
-        self.messages = MessagesOperations(session, base_url)
-        self.analysis = AnalysisOperations(session, base_url)
-        self.files = FilesOperations(session, base_url)
+        self.servers = ServersOperations(session, base_url, self.handle_http_error)
+        self.messages = MessagesOperations(session, base_url, self.handle_http_error)
+        self.analysis = AnalysisOperations(session, base_url, self.handle_http_error)
+        self.files = FilesOperations(session, base_url, self.handle_http_error)
+
+    def handle_http_error(self, response):
+        if response.status_code == 400:
+            raise MailosaurException("Request had one or more invalid parameters.", "invalid_request", response.status_code, response.text)
+        elif response.status_code == 401:
+            raise MailosaurException("Authentication failed, check your API key.", "authentication_error", response.status_code, response.text)
+        elif response.status_code == 403:
+            raise MailosaurException("Insufficient permission to perform that task.", "permission_error", response.status_code, response.text)
+        elif response.status_code == 404:
+            raise MailosaurException("Request did not find any matching resources.", "invalid_request", response.status_code, response.text)
+        else:
+            raise MailosaurException("An API error occurred, see httpResponse for further information.", "api_error", response.status_code, response.text)
