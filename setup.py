@@ -18,7 +18,7 @@ setup(
     license='MIT',
     keywords='email sms testing automation selenium robot framework',
     packages=find_packages(),
-    zip_safe=False, requires=['requests'])
+    zip_safe=False, requires=['requests'],
     install_requires=[
         'python-dateutil',
         'tzlocal',
