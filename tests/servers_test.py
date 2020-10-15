@@ -67,7 +67,7 @@ class ServersTest(TestCase):
             self.client.servers.create(options)
 
         ex = context.exception
-        self.assertEqual("Operation returned an invalid status code 'Bad Request'", ex.message)
-        self.assertEqual("ValidationError", ex.error.type)
-        self.assertEqual(1, len(ex.error.messages))
-        self.assertIsNotNone(ex.error.messages["name"])
+        self.assertEqual("Request had one or more invalid parameters.", ex.message)
+        self.assertEqual("invalid_request", ex.error_type)
+        self.assertEqual(400, ex.http_status_code)
+        self.assertEqual("{\"type\":\"ValidationError\",\"messages\":{\"name\":\"Please provide a name for your server\"}}", ex.http_response_body)

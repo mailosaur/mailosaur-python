@@ -9,10 +9,11 @@ class MessagesOperations(object):
     """MessagesOperations operations.
     """
 
-    def __init__(self, session, base_url):
+    def __init__(self, session, base_url, handle_http_error):
         self.session = session
         self.base_url = base_url
         self.timezone = get_localzone()
+        self.handle_http_error = handle_http_error
 
     def get(self, server, criteria, timeout=10000, received_after=(datetime.today() - timedelta(hours=1))):
         """Retrieve a message using search criteria.
@@ -34,8 +35,8 @@ class MessagesOperations(object):
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         # Defaults timeout to 10s, receivedAfter to 1h
-        if len(server) > 8:
-            raise Exception("Use get_by_id to retrieve a message using its identifier")
+        if len(server) != 8:
+            raise MailosaurException("Must provide a valid Server ID.", "invalid_request")
 
         result = self.search(server, criteria, 0, 1, timeout, received_after)
         return self.get_by_id(result.items[0].id)
@@ -57,7 +58,8 @@ class MessagesOperations(object):
         response = self.session.get(url)
         
         if response.status_code not in [200]:
-            raise MailosaurException(response)
+            self.handle_http_error(response)
+            return
 
         data = response.json()
 
@@ -80,7 +82,8 @@ class MessagesOperations(object):
         response = self.session.delete(url)
         
         if response.status_code not in [204]:
-            raise MailosaurException(response)
+            self.handle_http_error(response)
+            return
 
     def list(self, server, page=None, items_per_page=None, received_after=None):
         """List all messages.
@@ -113,7 +116,8 @@ class MessagesOperations(object):
         response = self.session.get(url, params=params)
         
         if response.status_code not in [200]:
-            raise MailosaurException(response)
+            self.handle_http_error(response)
+            return
 
         data = response.json()
 
@@ -138,7 +142,8 @@ class MessagesOperations(object):
         response = self.session.delete(url, params=params)
         
         if response.status_code not in [204]:
-            raise MailosaurException(response)
+            self.handle_http_error(response)
+            return
 
     def search(self, server, criteria, page=None, items_per_page=None, timeout=None, received_after=None):
         """Search for messages.
@@ -180,7 +185,8 @@ class MessagesOperations(object):
             response = self.session.post(url, params=params, json=criteria.toJSON())
 
             if response.status_code not in [200]:
-                raise MailosaurException(response)
+                self.handle_http_error(response)
+                return
             
             data = response.json()
 
@@ -199,6 +205,6 @@ class MessagesOperations(object):
 
             ## Stop if timeout will be exceeded
             if ((1000 * (datetime.today() - start_time).total_seconds()) + delay) > timeout:
-                raise Exception("No matching messages were found in time")
+                raise MailosaurException("No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).", "search_timeout")
 
             time.sleep(delay / 1000)
