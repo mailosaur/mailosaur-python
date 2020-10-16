@@ -46,7 +46,7 @@ class ServersTest(TestCase):
         self.assertIsInstance(retrieved_server.forwarding_rules, list)
 
         # Update a server and confirm it has changed
-        retrieved_server.name += " EDITED"
+        retrieved_server.name += " updated with ellipsis … and emoji 👨🏿‍🚒"
         updated_server = self.client.servers.update(retrieved_server.id, retrieved_server)
         self.assertEqual(retrieved_server.id, updated_server.id)
         self.assertEqual(retrieved_server.name, updated_server.name)

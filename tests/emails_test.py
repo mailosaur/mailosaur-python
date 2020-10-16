@@ -97,6 +97,12 @@ class EmailsTest(TestCase):
         self.assertEqual(1, len(results))
         self.assertEqual(target_email.to[0].email, results[0].to[0].email)
         self.assertEqual(target_email.subject, results[0].subject)
+    
+    def test_search_with_special_characters(self):
+        criteria = SearchCriteria()
+        criteria.subject = "Search with ellipsis … and emoji 👨🏿‍🚒"
+        results = self.client.messages.search(self.server, criteria).items
+        self.assertEqual(0, len(results))
 
     def test_spam_analysis(self):
         target_id = self.emails[0].id
