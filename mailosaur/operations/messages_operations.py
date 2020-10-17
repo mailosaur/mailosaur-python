@@ -110,7 +110,9 @@ class MessagesOperations(object):
         url = "%sapi/messages" % (self.base_url)
 
         if received_after is not None:
-            received_after = self.timezone.localize(received_after).isoformat()
+            if received_after.tzinfo is None or received_after.tzinfo.utcoffset(received_after) is None:
+                received_after = self.timezone.localize(received_after)
+            received_after = received_after.isoformat()
 
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
         response = self.session.get(url, params=params)
@@ -174,7 +176,9 @@ class MessagesOperations(object):
         url = "%sapi/messages/search" % (self.base_url)
 
         if received_after is not None:
-            received_after = self.timezone.localize(received_after).isoformat()
+            if received_after.tzinfo is None or received_after.tzinfo.utcoffset(received_after) is None:
+                received_after = self.timezone.localize(received_after)
+            received_after = received_after.isoformat()
 
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
 
