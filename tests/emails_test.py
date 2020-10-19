@@ -97,6 +97,26 @@ class EmailsTest(TestCase):
         self.assertEqual(1, len(results))
         self.assertEqual(target_email.to[0].email, results[0].to[0].email)
         self.assertEqual(target_email.subject, results[0].subject)
+
+    def test_search_with_match_all(self):
+        target_email = self.emails[1]
+        unique_string = target_email.subject[0:10]
+        criteria = SearchCriteria()
+        criteria.subject = unique_string
+        criteria.body = "this is a link"
+        criteria.match = "ALL"
+        results = self.client.messages.search(self.server, criteria).items
+        self.assertEqual(1, len(results))
+    
+    def test_search_with_match_any(self):
+        target_email = self.emails[1]
+        unique_string = target_email.subject[0:10]
+        criteria = SearchCriteria()
+        criteria.subject = unique_string
+        criteria.body = "this is a link"
+        criteria.match = "ANY"
+        results = self.client.messages.search(self.server, criteria).items
+        self.assertEqual(4, len(results))
     
     def test_search_with_special_characters(self):
         criteria = SearchCriteria()

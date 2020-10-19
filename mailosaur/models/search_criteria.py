@@ -8,16 +8,22 @@ class SearchCriteria(object):
     :param body: The value to seek within the target email's HTML or text
      body.
     :type body: str
+    :param match: If set to ALL (default), then only results that match all 
+     specified criteria will be returned. If set to ANY, results that match any of the
+     specified criteria will be returned.
+    :type body: str
     """
 
     def __init__(self):
         self.sent_to = None
         self.subject = None
         self.body = None
+        self.match = "ALL"
 
     def toJSON(self):
         return {
             'sentTo': self.sent_to,
             'subject': self.subject,
-            'body': self.body
+            'body': self.body,
+            'match': self.match
         }
