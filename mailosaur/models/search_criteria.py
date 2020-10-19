@@ -1,6 +1,8 @@
 class SearchCriteria(object):
     """SearchCriteria.
 
+    :param sent_from: The full email address from which the target email was sent.
+    :type sent_from: str
     :param sent_to: The full email address to which the target email was sent.
     :type sent_to: str
     :param subject: The value to seek within the target email's subject line.
@@ -15,6 +17,7 @@ class SearchCriteria(object):
     """
 
     def __init__(self):
+        self.sent_from = None
         self.sent_to = None
         self.subject = None
         self.body = None
@@ -22,6 +25,7 @@ class SearchCriteria(object):
 
     def toJSON(self):
         return {
+            'sentFrom': self.sent_from,
             'sentTo': self.sent_to,
             'subject': self.subject,
             'body': self.body,

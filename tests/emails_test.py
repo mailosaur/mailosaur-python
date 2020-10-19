@@ -62,6 +62,22 @@ class EmailsTest(TestCase):
         with self.assertRaises(MailosaurException):
             self.client.messages.search(self.server, SearchCriteria())
     
+    def test_search_by_sent_from(self):
+        target_email = self.emails[1]
+        criteria = SearchCriteria()
+        criteria.sent_from = target_email.sender[0].email
+        results = self.client.messages.search(self.server, criteria).items
+        self.assertEqual(1, len(results))
+        self.assertEqual(target_email.sender[0].email, results[0].sender[0].email)
+        self.assertEqual(target_email.subject, results[0].subject)
+
+    def test_search_by_sent_from_invalid_email(self):
+        criteria = SearchCriteria()
+        criteria.sent_from = ".not_an_email_address"
+
+        with self.assertRaises(MailosaurException):
+            self.client.messages.search(self.server, criteria)
+        
     def test_search_by_sent_to(self):
         target_email = self.emails[1]
         criteria = SearchCriteria()
