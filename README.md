@@ -1,6 +1,6 @@
 # Mailosaur Python Client Library
 
-[Mailosaur](https://mailosaur.com) allows you to automate tests involving email. Allowing you to perform end-to-end automated and functional email testing.
+[Mailosaur](https://mailosaur.com) lets you automate email and SMS tests, like account verification and password resets, and integrate these into your CI/CD pipeline.
 
 [![](https://github.com/mailosaur/mailosaur-python/workflows/CI/badge.svg)](https://github.com/mailosaur/mailosaur-python/actions)
 
@@ -10,20 +10,47 @@
 pip install --upgrade mailosaur
 ```
 
-## Documentation and usage examples
+## Documentation
 
-[Mailosaur's documentation](https://mailosaur.com/docs) includes all the information and usage examples you'll need.
+Please see the [Python client reference](https://mailosaur.com/docs/email-testing/python/client-reference/) for the most up-to-date documentation.
 
-## Running tests
+## Usage
 
-Once you've cloned this repository locally, you can simply run:
+example.py
 
+```python
+from mailosaur import MailosaurClient
+mailosaur = MailosaurClient("YOUR_API_KEY")
+
+result = mailosaur.servers.list()
+
+print("You have a server called: " + result.items[0]["name"])
 ```
-pip install -r requirements.txt
 
+## Development
+
+You must have the following prerequisites installed:
+
+* [pip](https://pip.pypa.io/en/stable/installing/)
+* [nose](https://nose.readthedocs.io/en/latest/)
+
+Install all development dependencies:
+
+```sh
+pip install -r requirements.txt
+```
+
+The test suite requires the following environment variables to be set:
+
+```sh
+export MAILOSAUR_BASE_URL=https://mailosaur.com/
 export MAILOSAUR_API_KEY=your_api_key
 export MAILOSAUR_SERVER=server_id
+```
 
+Run all tests:
+
+```sh
 nosetests
 ```
 
