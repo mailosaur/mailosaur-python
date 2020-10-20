@@ -58,6 +58,12 @@ class EmailsTest(TestCase):
         with self.assertRaises(MailosaurException):
             self.client.messages.get_by_id("efe907e9-74ed-4113-a3e0-a3d41d914765")
 
+    def test_search_timeout_errors_suppressed(self):
+        criteria = SearchCriteria()
+        criteria.sent_from = "neverfound@example.com"
+        results = self.client.messages.search(self.server, criteria, timeout=1, error_on_timeout=False).items
+        self.assertEqual(0, len(results))
+
     def test_search_no_criteria_error(self):
         with self.assertRaises(MailosaurException):
             self.client.messages.search(self.server, SearchCriteria())

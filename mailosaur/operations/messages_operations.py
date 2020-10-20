@@ -38,7 +38,7 @@ class MessagesOperations(object):
         if len(server) != 8:
             raise MailosaurException("Must provide a valid Server ID.", "invalid_request")
 
-        result = self.search(server, criteria, 0, 1, timeout, received_after)
+        result = self.search(server, criteria, 0, 1, timeout, received_after, True)
         return self.get_by_id(result.items[0].id)
 
     def get_by_id(self, id):
@@ -147,7 +147,7 @@ class MessagesOperations(object):
             self.handle_http_error(response)
             return
 
-    def search(self, server, criteria, page=None, items_per_page=None, timeout=None, received_after=None):
+    def search(self, server, criteria, page=None, items_per_page=None, timeout=None, received_after=None, error_on_timeout=True):
         """Search for messages.
 
         Returns a list of messages matching the specified search criteria, in
@@ -168,6 +168,9 @@ class MessagesOperations(object):
         :type timeout: int
         :param received_after: Limits results to only messages received after this date/time.
         :type received_after: datetime
+        :param error_on_timeout: When set to false, an error will not be throw if timeout 
+         is reached (default: true).
+        :type error_on_timeout: bool
         :return: MessageListResult
         :rtype: ~mailosaur.models.MessageListResult
         :raises:
@@ -209,6 +212,9 @@ class MessagesOperations(object):
 
             ## Stop if timeout will be exceeded
             if ((1000 * (datetime.today() - start_time).total_seconds()) + delay) > timeout:
-                raise MailosaurException("No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).", "search_timeout")
+                if not error_on_timeout:
+                    return result
+                else:
+                    raise MailosaurException("No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).", "search_timeout")
 
             time.sleep(delay / 1000)
