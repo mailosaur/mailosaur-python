@@ -1,5 +1,3 @@
-from .forwarding_rule import ForwardingRule
-
 class Server(object):
     """Server.
 
@@ -15,9 +13,6 @@ class Server(object):
     :type users: list[str]
     :param messages: The number of messages currently in the server.
     :type messages: int
-    :param forwarding_rules: The rules used to manage email forwarding for
-     this server.
-    :type forwarding_rules: list[~mailosaur.models.ForwardingRule]
     """
 
     def __init__(self, data=None):
@@ -29,4 +24,3 @@ class Server(object):
         self.name = data.get('name', None)
         self.users = data.get('users', None)
         self.messages = data.get('messages', None)
-        self.forwarding_rules = [ForwardingRule(i) for i in data.get('forwardingRules', [])]

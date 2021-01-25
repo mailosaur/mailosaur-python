@@ -13,7 +13,6 @@ from .message import Message
 from .message_summary import MessageSummary
 from .message_list_result import MessageListResult
 from .search_criteria import SearchCriteria
-from .forwarding_rule import ForwardingRule
 from .server import Server
 from .server_list_result import ServerListResult
 from .server_create_options import ServerCreateOptions
@@ -34,7 +33,6 @@ __all__ = [
     'MessageSummary',
     'MessageListResult',
     'SearchCriteria',
-    'ForwardingRule',
     'Server',
     'ServerListResult',
     'ServerCreateOptions',

@@ -34,7 +34,6 @@ class ServersTest(TestCase):
         self.assertIsNotNone(created_server.password)
         self.assertIsInstance(created_server.users, list)
         self.assertIsInstance(created_server.messages, numbers.Number)
-        self.assertIsInstance(created_server.forwarding_rules, list)
 
         # Retrieve a server and confirm it has expected content
         retrieved_server = self.client.servers.get(created_server.id)
@@ -43,7 +42,6 @@ class ServersTest(TestCase):
         self.assertIsNotNone(retrieved_server.password)
         self.assertIsInstance(retrieved_server.users, list)
         self.assertIsInstance(retrieved_server.messages, numbers.Number)
-        self.assertIsInstance(retrieved_server.forwarding_rules, list)
 
         # Update a server and confirm it has changed
         retrieved_server.name += " updated with ellipsis … and emoji 👨🏿‍🚒"
@@ -53,7 +51,6 @@ class ServersTest(TestCase):
         self.assertEqual(retrieved_server.password, updated_server.password)
         self.assertEqual(retrieved_server.users, updated_server.users)
         self.assertEqual(retrieved_server.messages, updated_server.messages)
-        self.assertEqual(retrieved_server.forwarding_rules, updated_server.forwarding_rules)
 
         self.client.servers.delete(retrieved_server.id)
 
