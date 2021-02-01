@@ -15,9 +15,9 @@ class ServersOperations(object):
         self.handle_http_error = handle_http_error
 
     def generate_email_address(self, server):
-        host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.io')
+        host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')
         randomString = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        return "%s.%s@%s" % (randomString, server, host)
+        return "%s@%s.%s" % (randomString, server, host)
 
     def list(self):
         """List all servers.

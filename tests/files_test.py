@@ -18,8 +18,8 @@ class EmailsTest(TestCase):
 
         cls.client.messages.delete_all(cls.server)
 
-        host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.io')
-        test_email_address = "files_test.%s@%s" % (cls.server, host)
+        host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')
+        test_email_address = "files_test@%s.%s" % (cls.server, host)
 
         Mailer.send_email(cls.client, cls.server, test_email_address)
 

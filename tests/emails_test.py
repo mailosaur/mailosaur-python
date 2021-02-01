@@ -38,8 +38,8 @@ class EmailsTest(TestCase):
         self.assertEqual(0, len(future_emails))
 
     def test_get(self):
-        host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.io')
-        test_email_address = "wait_for_test.%s@%s" % (self.server, host)
+        host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')
+        test_email_address = "wait_for_test@%s.%s" % (self.server, host)
 
         Mailer.send_email(self.client, self.server, test_email_address)
 
