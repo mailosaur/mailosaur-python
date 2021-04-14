@@ -31,7 +31,6 @@ class ServersTest(TestCase):
         created_server = self.client.servers.create(options)
         self.assertIsNotNone(created_server.id)
         self.assertEqual(server_name, created_server.name)
-        self.assertIsNotNone(created_server.password)
         self.assertIsInstance(created_server.users, list)
         self.assertIsInstance(created_server.messages, numbers.Number)
 
@@ -39,7 +38,6 @@ class ServersTest(TestCase):
         retrieved_server = self.client.servers.get(created_server.id)
         self.assertEqual(created_server.id, retrieved_server.id)
         self.assertEqual(created_server.name, retrieved_server.name)
-        self.assertIsNotNone(retrieved_server.password)
         self.assertIsInstance(retrieved_server.users, list)
         self.assertIsInstance(retrieved_server.messages, numbers.Number)
 
@@ -48,7 +46,6 @@ class ServersTest(TestCase):
         updated_server = self.client.servers.update(retrieved_server.id, retrieved_server)
         self.assertEqual(retrieved_server.id, updated_server.id)
         self.assertEqual(retrieved_server.name, updated_server.name)
-        self.assertEqual(retrieved_server.password, updated_server.password)
         self.assertEqual(retrieved_server.users, updated_server.users)
         self.assertEqual(retrieved_server.messages, updated_server.messages)
 
