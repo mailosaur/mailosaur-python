@@ -41,6 +41,10 @@ class ServersTest(TestCase):
         self.assertIsInstance(retrieved_server.users, list)
         self.assertIsInstance(retrieved_server.messages, numbers.Number)
 
+        # Retrieve server password
+        password = self.client.servers.get_password(created_server.id)
+        self.assertTrue(len(password) >= 8)
+
         # Update a server and confirm it has changed
         retrieved_server.name += " updated with ellipsis … and emoji 👨🏿‍🚒"
         updated_server = self.client.servers.update(retrieved_server.id, retrieved_server)

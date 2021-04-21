@@ -88,6 +88,30 @@ class ServersOperations(object):
 
         return Server(data)
 
+    def get_password(self, id):
+        """Retrieve server password.
+
+        Retrieves the password for use with SMTP and POP3 for a single server. 
+        Simply supply the unique identifier for the required server.
+
+        :param id: The identifier of the server.
+        :type id: str
+        :return: str
+        :rtype: str
+        :raises:
+         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        """
+        url = "%sapi/servers/%s/password" % (self.base_url, id)
+        response = self.session.get(url)
+
+        if response.status_code not in [200]:
+            self.handle_http_error(response)
+            return
+
+        data = response.json()
+
+        return data.get('value', None)
+
     def update(
             self, id, server):
         """Update a server.
