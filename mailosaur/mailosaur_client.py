@@ -15,6 +15,7 @@ from .operations.servers_operations import ServersOperations
 from .operations.messages_operations import MessagesOperations
 from .operations.analysis_operations import AnalysisOperations
 from .operations.files_operations import FilesOperations
+from .operations.usage_operations import UsageOperations
 from .models.mailosaur_exception import MailosaurException
 
 class MailosaurClient(object):
@@ -26,10 +27,14 @@ class MailosaurClient(object):
         session.auth = (api_key, '')
         session.headers.update({'User-Agent': 'mailosaur-python/7.0.0'})
 
+        if base_url is None:
+            base_url = "https://mailosaur.com/"
+
         self.servers = ServersOperations(session, base_url, self.handle_http_error)
         self.messages = MessagesOperations(session, base_url, self.handle_http_error)
         self.analysis = AnalysisOperations(session, base_url, self.handle_http_error)
         self.files = FilesOperations(session, base_url, self.handle_http_error)
+        self.usage = UsageOperations(session, base_url, self.handle_http_error)
 
     def handle_http_error(self, response):
         if response.status_code == 400:
