@@ -14,7 +14,7 @@ class UsageTest(TestCase):
         self.client = MailosaurClient(api_key, base_url)
 
     def test_account_limits(self):
-        result = self.client.usage.account_limits()
+        result = self.client.usage.limits()
         self.assertIsNotNone(result.servers)
         self.assertIsNotNone(result.users)
         self.assertIsNotNone(result.email)

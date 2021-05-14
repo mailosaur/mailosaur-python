@@ -11,7 +11,7 @@ class UsageOperations(object):
         self.base_url = base_url
         self.handle_http_error = handle_http_error
 
-    def account_limits(self):
+    def limits(self):
         """Retrieve account usage limits.
 
         Details the current limits and usage for your account.
