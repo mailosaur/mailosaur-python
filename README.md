@@ -169,7 +169,7 @@ pip install beautifulsoup4
 ```py
 from bs4 import BeautifulSoup
 
-// ...
+# ...
 
 dom = BeautifulSoup(message.html.body, 'html.parser')
 
