@@ -19,7 +19,7 @@ class UsageOperations(object):
         :return: UsageAccountLimits
         :rtype: ~mailosaur.models.UsageAccountLimits
         :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/usage/limits" % (self.base_url)
         response = self.session.get(url)
@@ -40,7 +40,7 @@ class UsageOperations(object):
         :return: UsageTransactionListResult
         :rtype: ~mailosaur.models.UsageTransactionListResult
         :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/usage/transactions" % (self.base_url)
         response = self.session.get(url)

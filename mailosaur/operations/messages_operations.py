@@ -1,5 +1,4 @@
 import time
-from tzlocal import get_localzone
 from datetime import datetime, timedelta
 from ..models import MessageListResult
 from ..models import Message
@@ -12,7 +11,6 @@ class MessagesOperations(object):
     def __init__(self, session, base_url, handle_http_error):
         self.session = session
         self.base_url = base_url
-        self.timezone = get_localzone()
         self.handle_http_error = handle_http_error
 
     def get(self, server, criteria, timeout=10000, received_after=(datetime.today() - timedelta(hours=1))):
@@ -110,9 +108,7 @@ class MessagesOperations(object):
         url = "%sapi/messages" % (self.base_url)
 
         if received_after is not None:
-            if received_after.tzinfo is None or received_after.tzinfo.utcoffset(received_after) is None:
-                received_after = self.timezone.localize(received_after)
-            received_after = received_after.isoformat()
+            received_after = received_after.astimezone().replace(microsecond=0).isoformat()
 
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
         response = self.session.get(url, params=params)
@@ -179,9 +175,7 @@ class MessagesOperations(object):
         url = "%sapi/messages/search" % (self.base_url)
 
         if received_after is not None:
-            if received_after.tzinfo is None or received_after.tzinfo.utcoffset(received_after) is None:
-                received_after = self.timezone.localize(received_after)
-            received_after = received_after.isoformat()
+            received_after = received_after.astimezone().replace(microsecond=0).isoformat()
 
         params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
 
