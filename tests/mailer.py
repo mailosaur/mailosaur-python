@@ -10,7 +10,7 @@ from email.mime.image import MIMEImage
 class Mailer(object):
     html = open(os.path.join(os.path.dirname(__file__), 'resources', 'testEmail.html'), 'r').read()
     text = open(os.path.join(os.path.dirname(__file__), 'resources', 'testEmail.txt'), 'r').read()
-    verified_domain = os.getenv('MAILOSAUR_VERIFIED_DOMAIN')
+    verified_domain = os.getenv('MAILOSAUR_VERIFIED_DOMAIN') or "mailosaur.net"
 
     @staticmethod
     def send_emails(client, server, quantity):
