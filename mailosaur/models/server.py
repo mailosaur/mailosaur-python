@@ -21,3 +21,11 @@ class Server(object):
         self.name = data.get('name', None)
         self.users = data.get('users', None)
         self.messages = data.get('messages', None)
+    
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'users': self.users,
+            'messages': self.messages
+        }

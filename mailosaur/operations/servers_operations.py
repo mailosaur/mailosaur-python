@@ -54,7 +54,7 @@ class ServersOperations(object):
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/servers" % (self.base_url)
-        response = self.session.post(url, json=server_create_options.__dict__)
+        response = self.session.post(url, json=server_create_options.to_json())
         
         if response.status_code not in [200]:
             self.handle_http_error(response)
@@ -129,7 +129,7 @@ class ServersOperations(object):
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/servers/%s" % (self.base_url, id)
-        response = self.session.put(url, json=server.__dict__)
+        response = self.session.put(url, json=server.to_json())
         
         if response.status_code not in [200]:
             self.handle_http_error(response)

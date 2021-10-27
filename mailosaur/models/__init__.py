@@ -12,6 +12,9 @@ from .metadata import Metadata
 from .message import Message
 from .message_summary import MessageSummary
 from .message_list_result import MessageListResult
+from .message_create_options import MessageCreateOptions
+from .message_forward_options import MessageForwardOptions
+from .message_reply_options import MessageReplyOptions
 from .search_criteria import SearchCriteria
 from .server import Server
 from .server_list_result import ServerListResult
@@ -36,6 +39,9 @@ __all__ = [
     'Message',
     'MessageSummary',
     'MessageListResult',
+    'MessageCreateOptions',
+    'MessageForwardOptions',
+    'MessageReplyOptions',
     'SearchCriteria',
     'Server',
     'ServerListResult',

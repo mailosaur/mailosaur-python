@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from unittest import TestCase
 from .mailer import Mailer
 from mailosaur import MailosaurClient
-from mailosaur.models import SearchCriteria, MailosaurException
+from mailosaur.models import SearchCriteria, MessageCreateOptions, MessageForwardOptions, MessageReplyOptions, MailosaurException
 
 class EmailsTest(TestCase):
     @classmethod
@@ -11,8 +11,9 @@ class EmailsTest(TestCase):
         api_key = os.getenv('MAILOSAUR_API_KEY')
         base_url = os.getenv('MAILOSAUR_BASE_URL')
         cls.server = os.getenv('MAILOSAUR_SERVER')
+        cls.verified_domain = os.getenv('MAILOSAUR_VERIFIED_DOMAIN')
 
-        if (api_key or cls.server) is None:
+        if (api_key or cls.server or cls.verified_domain) is None:
             raise Exception("Missing necessary environment variables - refer to README.md")
 
         cls.client = MailosaurClient(api_key, base_url)
@@ -162,6 +163,48 @@ class EmailsTest(TestCase):
         # Attempting to delete again should fail
         with self.assertRaises(MailosaurException):
             self.client.messages.delete(target_email_id)
+    
+    def test_create_and_send_with_text(self):
+        subject = "New message"
+        options = MessageCreateOptions("anything@%s" % (self.verified_domain), True,  subject, "This is a new email")
+        message = self.client.messages.create(self.server, options)
+        self.assertIsNotNone(message.id)
+        self.assertEqual(subject, message.subject)
+    
+    def test_create_and_send_with_html(self):
+        subject = "New HTML message"
+        options = MessageCreateOptions("anything@%s" % (self.verified_domain), True,  subject, html="<p>This is a new email.</p>")
+        message = self.client.messages.create(self.server, options)
+        self.assertIsNotNone(message.id)
+        self.assertEqual(subject, message.subject)
+    
+    def test_forward_with_text(self):
+        body = "Forwarded message"
+        options = MessageForwardOptions("anything@%s" % (self.verified_domain), body)
+        message = self.client.messages.forward(self.emails[0].id, options)
+        self.assertIsNotNone(message.id)
+        self.assertTrue(body in message.text.body)
+    
+    def test_forward_with_html(self):
+        body = "<p>Forwarded <strong>HTML</strong> message.</p>"
+        options = MessageForwardOptions("anything@%s" % (self.verified_domain), html=body)
+        message = self.client.messages.forward(self.emails[0].id, options)
+        self.assertIsNotNone(message.id)
+        self.assertTrue(body in message.html.body)
+    
+    def test_reply_with_text(self):
+        body = "Reply message body"
+        options = MessageReplyOptions(body)
+        message = self.client.messages.reply(self.emails[0].id, options)
+        self.assertIsNotNone(message.id)
+        self.assertTrue(body in message.text.body)
+    
+    def test_reply_with_html(self):
+        body = "<p>Reply <strong>HTML</strong> message body.</p>"
+        options = MessageReplyOptions(html=body)
+        message = self.client.messages.reply(self.emails[0].id, options)
+        self.assertIsNotNone(message.id)
+        self.assertTrue(body in message.html.body)
 
     def validate_email(self, email):
         self.validate_metadata(email)

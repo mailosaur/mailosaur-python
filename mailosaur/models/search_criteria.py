@@ -23,7 +23,7 @@ class SearchCriteria(object):
         self.body = None
         self.match = "ALL"
 
-    def toJSON(self):
+    def to_json(self):
         return {
             'sentFrom': self.sent_from,
             'sentTo': self.sent_to,

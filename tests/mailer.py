@@ -10,6 +10,7 @@ from email.mime.image import MIMEImage
 class Mailer(object):
     html = open(os.path.join(os.path.dirname(__file__), 'resources', 'testEmail.html'), 'r').read()
     text = open(os.path.join(os.path.dirname(__file__), 'resources', 'testEmail.txt'), 'r').read()
+    verified_domain = os.getenv('MAILOSAUR_VERIFIED_DOMAIN')
 
     @staticmethod
     def send_emails(client, server, quantity):
@@ -31,7 +32,7 @@ class Mailer(object):
         if (random_to_address == None):
             random_to_address = client.servers.generate_email_address(server)
 
-        message['From'] = "%s %s <%s>" % (randomString, randomString, client.servers.generate_email_address(server))
+        message['From'] = "%s %s <%s@%s>" % (randomString, randomString, randomString, Mailer.verified_domain)
         message['To'] = "%s %s <%s>" % (randomString, randomString, random_to_address)
         
         alt = MIMEMultipart('alternative')

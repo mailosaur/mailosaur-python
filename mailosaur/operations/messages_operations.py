@@ -183,7 +183,7 @@ class MessagesOperations(object):
         start_time = datetime.today()
 
         while True:
-            response = self.session.post(url, params=params, json=criteria.toJSON())
+            response = self.session.post(url, params=params, json=criteria.to_json())
 
             if response.status_code not in [200]:
                 self.handle_http_error(response)
@@ -212,3 +212,82 @@ class MessagesOperations(object):
                     raise MailosaurException("No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).", "search_timeout")
 
             time.sleep(delay / 1000)
+    
+    def create(self, server, options):
+        """Create a message.
+
+        Creates a new message that can be sent to a verified email address. This is
+        useful in scenarios where you want an email to trigger a workflow in your
+        product
+
+        :param server: The identifier of the server to create the message in.
+        :type server: str
+        :param options: The options with which to create the message.
+        :type options: ~mailosaur.models.MessageCreateOptions
+        :return: None
+        :rtype: None
+        :raises:
+         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        """
+        url = "%sapi/messages" % (self.base_url)
+        params = {'server': server}
+        response = self.session.post(url, params=params, json=options.to_json())
+
+        if response.status_code not in [200]:
+            self.handle_http_error(response)
+            return
+            
+        data = response.json()
+
+        return Message(data)
+    
+    def forward(self, id, options):
+        """Forward an email.
+
+        Forwards the specified email to a verified email address.
+
+        :param id: The identifier of the email to forward.
+        :type id: str
+        :param options: The options with which to forward the email.
+        :type options: ~mailosaur.models.MessageForwardOptions
+        :return: None
+        :rtype: None
+        :raises:
+         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        """
+        url = "%sapi/messages/%s/forward" % (self.base_url, id)
+        response = self.session.post(url, json=options.to_json())
+
+        if response.status_code not in [200]:
+            self.handle_http_error(response)
+            return
+            
+        data = response.json()
+
+        return Message(data)
+
+    def reply(self, id, options):
+        """Reply to an email.
+
+        Sends a reply to the specified email. This is useful for when simulating a user
+        replying to one of your emails.
+
+        :param id: The identifier of the email to reply to.
+        :type id: str
+        :param options: The options with which to reply to the email.
+        :type options: ~mailosaur.models.MessageReplyOptions
+        :return: None
+        :rtype: None
+        :raises:
+         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        """
+        url = "%sapi/messages/%s/reply" % (self.base_url, id)
+        response = self.session.post(url, json=options.to_json())
+
+        if response.status_code not in [200]:
+            self.handle_http_error(response)
+            return
+            
+        data = response.json()
+
+        return Message(data)
