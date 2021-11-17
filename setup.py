@@ -27,7 +27,7 @@ setup(
     ],
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
     tests_require=[
-        'nose >= 1.3'
+        'pytest >= 6.2.5'
     ],
     project_urls={
         'Bug Tracker': 'https://github.com/mailosaur/mailosaur-python/issues',

@@ -1,5 +1,5 @@
 import os
-from nose import SkipTest
+import pytest
 from datetime import datetime, timedelta
 from unittest import TestCase
 from .mailer import Mailer
@@ -167,7 +167,7 @@ class EmailsTest(TestCase):
     
     def test_create_and_send_with_text(self):
         if self.verified_domain is None:
-            raise SkipTest
+            pytest.skip("Requires verified domain secret")
 
         subject = "New message"
         options = MessageCreateOptions("anything@%s" % (self.verified_domain), True,  subject, "This is a new email")
@@ -177,7 +177,7 @@ class EmailsTest(TestCase):
     
     def test_create_and_send_with_html(self):
         if self.verified_domain is None:
-            raise SkipTest
+            pytest.skip("Requires verified domain secret")
 
         subject = "New HTML message"
         options = MessageCreateOptions("anything@%s" % (self.verified_domain), True,  subject, html="<p>This is a new email.</p>")
@@ -187,7 +187,7 @@ class EmailsTest(TestCase):
     
     def test_forward_with_text(self):
         if self.verified_domain is None:
-            raise SkipTest
+            pytest.skip("Requires verified domain secret")
 
         body = "Forwarded message"
         options = MessageForwardOptions("anything@%s" % (self.verified_domain), body)
@@ -197,7 +197,7 @@ class EmailsTest(TestCase):
     
     def test_forward_with_html(self):
         if self.verified_domain is None:
-            raise SkipTest
+            pytest.skip("Requires verified domain secret")
 
         body = "<p>Forwarded <strong>HTML</strong> message.</p>"
         options = MessageForwardOptions("anything@%s" % (self.verified_domain), html=body)
@@ -207,7 +207,7 @@ class EmailsTest(TestCase):
     
     def test_reply_with_text(self):
         if self.verified_domain is None:
-            raise SkipTest
+            pytest.skip("Requires verified domain secret")
 
         body = "Reply message body"
         options = MessageReplyOptions(body)
@@ -217,7 +217,7 @@ class EmailsTest(TestCase):
     
     def test_reply_with_html(self):
         if self.verified_domain is None:
-            raise SkipTest
+            pytest.skip("Requires verified domain secret")
 
         body = "<p>Reply <strong>HTML</strong> message body.</p>"
         options = MessageReplyOptions(html=body)

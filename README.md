@@ -293,7 +293,6 @@ for r in result.spam_filter_results.spam_assassin:
 You must have the following prerequisites installed:
 
 * [pip](https://pip.pypa.io/en/stable/installing/)
-* [nose](https://nose.readthedocs.io/en/latest/)
 
 Install all development dependencies:
 
@@ -312,7 +311,7 @@ export MAILOSAUR_SERVER=server_id
 Run all tests:
 
 ```sh
-nosetests
+pytest
 ```
 
 ## Contacting us
