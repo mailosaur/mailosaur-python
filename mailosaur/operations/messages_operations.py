@@ -4,6 +4,7 @@ from ..models import MessageListResult
 from ..models import Message
 from ..models import MailosaurException
 
+
 class MessagesOperations(object):
     """MessagesOperations operations.
     """
@@ -34,9 +35,11 @@ class MessagesOperations(object):
         """
         # Defaults timeout to 10s, receivedAfter to 1h
         if len(server) != 8:
-            raise MailosaurException("Must provide a valid Server ID.", "invalid_request")
+            raise MailosaurException(
+                "Must provide a valid Server ID.", "invalid_request")
 
-        result = self.search(server, criteria, 0, 1, timeout, received_after, True)
+        result = self.search(server, criteria, 0, 1,
+                             timeout, received_after, True)
         return self.get_by_id(result.items[0].id)
 
     def get_by_id(self, id):
@@ -54,7 +57,7 @@ class MessagesOperations(object):
         """
         url = "%sapi/messages/%s" % (self.base_url, id)
         response = self.session.get(url)
-        
+
         if response.status_code not in [200]:
             self.handle_http_error(response)
             return
@@ -78,7 +81,7 @@ class MessagesOperations(object):
         """
         url = "%sapi/messages/%s" % (self.base_url, id)
         response = self.session.delete(url)
-        
+
         if response.status_code not in [204]:
             self.handle_http_error(response)
             return
@@ -110,9 +113,10 @@ class MessagesOperations(object):
         if received_after is not None:
             received_after = received_after.astimezone().replace(microsecond=0).isoformat()
 
-        params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
+        params = {'server': server, 'page': page,
+                  'itemsPerPage': items_per_page, 'receivedAfter': received_after}
         response = self.session.get(url, params=params)
-        
+
         if response.status_code not in [200]:
             self.handle_http_error(response)
             return
@@ -138,7 +142,7 @@ class MessagesOperations(object):
         url = "%sapi/messages" % (self.base_url)
         params = {'server': server}
         response = self.session.delete(url, params=params)
-        
+
         if response.status_code not in [204]:
             self.handle_http_error(response)
             return
@@ -177,42 +181,47 @@ class MessagesOperations(object):
         if received_after is not None:
             received_after = received_after.astimezone().replace(microsecond=0).isoformat()
 
-        params = {'server': server, 'page': page, 'itemsPerPage': items_per_page, 'receivedAfter': received_after}
+        params = {'server': server, 'page': page,
+                  'itemsPerPage': items_per_page, 'receivedAfter': received_after}
 
         poll_count = 0
         start_time = datetime.today()
 
         while True:
-            response = self.session.post(url, params=params, json=criteria.to_json())
+            response = self.session.post(
+                url, params=params, json=criteria.to_json())
 
             if response.status_code not in [200]:
                 self.handle_http_error(response)
                 return
-            
+
             data = response.json()
 
             result = MessageListResult(data)
 
             if timeout is None or timeout == 0 or len(result.items) != 0:
                 return result
-            
+
             # List conversion necessary for Python 3 compatibility
             # https://stackoverflow.com/questions/36982858/object-of-type-map-has-no-len-in-python-3
-            delay_pattern = list(map(int, (response.headers.get('x-ms-delay') or '1000').split(',')))
+            delay_pattern = list(
+                map(int, (response.headers.get('x-ms-delay') or '1000').split(',')))
 
-            delay = delay_pattern[len(delay_pattern) - 1] if poll_count >= len(delay_pattern) else delay_pattern[poll_count]
-            
+            delay = delay_pattern[len(
+                delay_pattern) - 1] if poll_count >= len(delay_pattern) else delay_pattern[poll_count]
+
             poll_count += 1
 
-            ## Stop if timeout will be exceeded
+            # Stop if timeout will be exceeded
             if ((1000 * (datetime.today() - start_time).total_seconds()) + delay) > timeout:
                 if not error_on_timeout:
                     return result
                 else:
-                    raise MailosaurException("No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).", "search_timeout")
+                    raise MailosaurException(
+                        "No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).", "search_timeout")
 
             time.sleep(delay / 1000)
-    
+
     def create(self, server, options):
         """Create a message.
 
@@ -231,16 +240,17 @@ class MessagesOperations(object):
         """
         url = "%sapi/messages" % (self.base_url)
         params = {'server': server}
-        response = self.session.post(url, params=params, json=options.to_json())
+        response = self.session.post(
+            url, params=params, json=options.to_json())
 
         if response.status_code not in [200]:
             self.handle_http_error(response)
             return
-            
+
         data = response.json()
 
         return Message(data)
-    
+
     def forward(self, id, options):
         """Forward an email.
 
@@ -261,7 +271,7 @@ class MessagesOperations(object):
         if response.status_code not in [200]:
             self.handle_http_error(response)
             return
-            
+
         data = response.json()
 
         return Message(data)
@@ -287,7 +297,7 @@ class MessagesOperations(object):
         if response.status_code not in [200]:
             self.handle_http_error(response)
             return
-            
+
         data = response.json()
 
         return Message(data)
