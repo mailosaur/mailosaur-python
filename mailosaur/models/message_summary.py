@@ -1,6 +1,7 @@
 import dateutil.parser
 from .message_address import MessageAddress
 
+
 class MessageSummary(object):
     """MessageSummary.
 
@@ -8,8 +9,6 @@ class MessageSummary(object):
     :type id: str
     :param server:
     :type server: str
-    :param rcpt:
-    :type rcpt: list[~mailosaur.models.MessageAddress]
     :param sender:
     :type sender: list[~mailosaur.models.MessageAddress]
     :param to:

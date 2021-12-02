@@ -291,6 +291,9 @@ class EmailsTest(TestCase):
         self.validate_attachments(email)
         self.validate_html(email)
         self.validate_text(email)
+        self.assertIsNotNone(email.metadata.ehlo)
+        self.assertIsNotNone(email.metadata.mail_from)
+        self.assertEqual(1, len(email.metadata.rcpt_to))
 
     def validate_email_summary(self, email):
         self.validate_metadata(email)

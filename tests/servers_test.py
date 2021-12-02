@@ -4,6 +4,7 @@ from unittest import TestCase
 from mailosaur import MailosaurClient
 from mailosaur.models import ServerCreateOptions, MailosaurException
 
+
 class ServersTest(TestCase):
     @classmethod
     def setUpClass(self):
@@ -11,7 +12,8 @@ class ServersTest(TestCase):
         base_url = os.getenv('MAILOSAUR_BASE_URL')
 
         if api_key is None:
-            raise Exception("Missing necessary environment variables - refer to README.md")
+            raise Exception(
+                "Missing necessary environment variables - refer to README.md")
 
         self.client = MailosaurClient(api_key, base_url)
 
@@ -47,7 +49,8 @@ class ServersTest(TestCase):
 
         # Update a server and confirm it has changed
         retrieved_server.name += " updated with ellipsis … and emoji 👨🏿‍🚒"
-        updated_server = self.client.servers.update(retrieved_server.id, retrieved_server)
+        updated_server = self.client.servers.update(
+            retrieved_server.id, retrieved_server)
         self.assertEqual(retrieved_server.id, updated_server.id)
         self.assertEqual(retrieved_server.name, updated_server.name)
         self.assertEqual(retrieved_server.users, updated_server.users)
@@ -65,7 +68,8 @@ class ServersTest(TestCase):
             self.client.servers.create(options)
 
         ex = context.exception
-        self.assertEqual("Request had one or more invalid parameters.", ex.message)
+        self.assertEqual(
+            "Request had one or more invalid parameters.", ex.message)
         self.assertEqual("invalid_request", ex.error_type)
         self.assertEqual(400, ex.http_status_code)
-        self.assertEqual("{\"type\":\"ValidationError\",\"messages\":{\"name\":\"Please provide a name for your server\"}}", ex.http_response_body)
+        self.assertTrue("{\"type\":" in ex.http_response_body)

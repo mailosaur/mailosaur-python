@@ -1,19 +1,23 @@
 class Attachment(object):
-    """Attachment.
+    """Describes a message attachment.
 
-    :param id:
+    :param id: Unique identifier for the attachment.
     :type id: str
-    :param content_type:
+
+    :param content_type: The MIME type of the attachment.
     :type content_type: str
-    :param file_name:
+
+    :param file_name: The filename of the attachment.
     :type file_name: str
-    :param content_id:
-    :type content_id: str
-    :param content:
+
+    :param content: The base64-encoded content of the attachment. Note: This is only populated when sending attachments.
     :type content: str
-    :param length:
+
+    :param content_id: The content identifier (for attachments that are embedded within the body of the message).
+    :type content_id: str
+    :param length: The file size, in bytes.
     :type length: int
-    :param url:
+    :param url: The URL from which the attachment can be downloaded.
     :type url: str
     """
 
@@ -28,6 +32,9 @@ class Attachment(object):
         self.content = data.get('content', None)
         self.length = data.get('length', None)
         self.url = data.get('url', None)
+
+    # You can optionally declare instance variables in the class body
+    text2: str
 
     def to_json(self):
         return {
