@@ -10,7 +10,9 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-concurrency: mailosaur-python
+concurrency: 
+  group: mailosaur-python
+  cancel-in-progress: true
 
 jobs:
   build:
