@@ -7,9 +7,12 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
+
 class Mailer(object):
-    html = open(os.path.join(os.path.dirname(__file__), 'resources', 'testEmail.html'), 'r').read()
-    text = open(os.path.join(os.path.dirname(__file__), 'resources', 'testEmail.txt'), 'r').read()
+    html = open(os.path.join(os.path.dirname(__file__),
+                'resources', 'testEmail.html'), 'r').read()
+    text = open(os.path.join(os.path.dirname(__file__),
+                'resources', 'testEmail.txt'), 'r').read()
     verified_domain = os.getenv('MAILOSAUR_VERIFIED_DOMAIN') or "mailosaur.net"
 
     @staticmethod
@@ -18,13 +21,14 @@ class Mailer(object):
             Mailer.send_email(client, server)
 
     @staticmethod
-    def send_email(client, server, send_to_address = None):
+    def send_email(client, server, send_to_address=None):
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')
         port = os.getenv('MAILOSAUR_SMTP_PORT', '25')
-        
+
         message = MIMEMultipart('related')
 
-        randomString = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        randomString = ''.join(random.choice(
+            string.ascii_uppercase + string.ascii_lowercase) for _ in range(10))
 
         message['Subject'] = "%s subject" % (randomString)
 
@@ -32,26 +36,32 @@ class Mailer(object):
         if (random_to_address == None):
             random_to_address = client.servers.generate_email_address(server)
 
-        message['From'] = "%s %s <%s@%s>" % (randomString, randomString, randomString, Mailer.verified_domain)
-        message['To'] = "%s %s <%s>" % (randomString, randomString, random_to_address)
-        
+        message['From'] = "%s %s <%s@%s>" % (randomString,
+                                             randomString, randomString, Mailer.verified_domain)
+        message['To'] = "%s %s <%s>" % (
+            randomString, randomString, random_to_address)
+
         alt = MIMEMultipart('alternative')
         message.attach(alt)
 
         # Text body
-        alt.attach(MIMEText(Mailer.text.replace("REPLACED_DURING_TEST", randomString)))
+        alt.attach(MIMEText(Mailer.text.replace(
+            "REPLACED_DURING_TEST", randomString)))
 
         # Html body
-        alt.attach(MIMEText(Mailer.html.replace("REPLACED_DURING_TEST", randomString), 'html'))
+        alt.attach(MIMEText(Mailer.html.replace(
+            "REPLACED_DURING_TEST", randomString), 'html'))
 
-        fp = open(os.path.join(os.path.dirname(__file__), 'resources', 'cat.png'), 'rb')
+        fp = open(os.path.join(os.path.dirname(
+            __file__), 'resources', 'cat.png'), 'rb')
         img = MIMEImage(fp.read())
         img.add_header('Content-ID', 'ii_1435fadb31d523f6')
         img.add_header('Content-Disposition', 'inline', filename='cat.png')
         message.attach(img)
         fp.close()
 
-        fp = open(os.path.join(os.path.dirname(__file__), 'resources', 'dog.png'), 'rb')
+        fp = open(os.path.join(os.path.dirname(
+            __file__), 'resources', 'dog.png'), 'rb')
         img = MIMEImage(fp.read())
         img.add_header('Content-Disposition', 'attachment', filename='dog.png')
         message.attach(img)

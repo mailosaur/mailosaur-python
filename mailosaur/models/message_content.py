@@ -1,11 +1,15 @@
 from .link import Link
+from .code import Code
 from .image import Image
+
 
 class MessageContent(object):
     """MessageContent.
 
     :param links:
     :type links: list[~mailosaur.models.Link]
+    :param codes:
+    :type codes: list[~mailosaur.models.Code]
     :param images:
     :type images: list[~mailosaur.models.Image]
     :param body:
@@ -17,6 +21,7 @@ class MessageContent(object):
             data = {}
 
         self.links = [Link(i) for i in data.get('links', [])]
+        self.codes = [Code(i) for i in data.get('codes', [])]
 
         images = data.get('images', None)
         if isinstance(images, list):

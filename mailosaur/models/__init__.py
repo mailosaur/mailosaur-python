@@ -4,6 +4,7 @@ from .spam_analysis_result import SpamAnalysisResult
 from .mailosaur_exception import MailosaurException
 from .message_address import MessageAddress
 from .link import Link
+from .code import Code
 from .image import Image
 from .message_content import MessageContent
 from .attachment import Attachment
@@ -31,6 +32,7 @@ __all__ = [
     'MailosaurException',
     'MessageAddress',
     'Link',
+    'Code',
     'Image',
     'MessageContent',
     'Attachment',

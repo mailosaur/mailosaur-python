@@ -313,6 +313,11 @@ class EmailsTest(TestCase):
         self.assertEqual("http://invalid/", email.html.links[2].href)
         self.assertEqual("invalid", email.html.links[2].text)
 
+        # Html.Codes
+        self.assertEqual(2, len(email.html.codes))
+        self.assertEqual("123456", email.html.codes[0].value)
+        self.assertEqual("G3H1Y2", email.html.codes[1].value)
+
         # Html.Images
         self.assertTrue(email.html.images[1].src.startswith('cid:'))
         self.assertEqual("Inline image 1", email.html.images[1].alt)
@@ -327,6 +332,11 @@ class EmailsTest(TestCase):
         self.assertEqual(email.text.links[0].href, email.text.links[0].text)
         self.assertEqual("https://mailosaur.com/", email.text.links[1].href)
         self.assertEqual(email.text.links[1].href, email.text.links[1].text)
+
+        # Text.Codes
+        self.assertEqual(2, len(email.text.codes))
+        self.assertEqual("654321", email.text.codes[0].value)
+        self.assertEqual("5H0Y2", email.text.codes[1].value)
 
     def validate_headers(self, email):
         expected_from_header = "%s <%s>" % (
