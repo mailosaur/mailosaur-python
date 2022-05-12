@@ -24,6 +24,10 @@ from .usage_account_limits import UsageAccountLimits
 from .usage_account_limit import UsageAccountLimit
 from .usage_transaction_list_result import UsageTransactionListResult
 from .usage_transaction import UsageTransaction
+from .device import Device
+from .device_list_result import DeviceListResult
+from .device_create_options import DeviceCreateOptions
+from .otp_result import OtpResult
 
 __all__ = [
     'SpamAssassinRule',
@@ -51,5 +55,9 @@ __all__ = [
     'UsageAccountLimits',
     'UsageAccountLimit',
     'UsageTransactionListResult',
-    'UsageTransaction'
+    'UsageTransaction',
+    'Device',
+    'DeviceListResult',
+    'DeviceCreateOptions',
+    'OtpResult'
 ]
