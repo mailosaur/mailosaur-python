@@ -34,11 +34,15 @@ class DevicesTest(TestCase):
         otp_result = self.client.devices.otp(created_device.id)
         self.assertEqual(6, len(otp_result.code))
 
-        list_result = self.client.devices.list()
-        self.assertEqual(1, len(list_result.items))
+        before = self.client.devices.list()
+        self.assertTrue(
+            any(x['id'] == created_device.id for x in before.items))
+
         self.client.devices.delete(created_device.id)
-        list_result = self.client.devices.list()
-        self.assertEqual(0, len(list_result.items))
+
+        after = self.client.devices.list()
+        self.assertFalse(
+            any(x['id'] == created_device.id for x in after.items))
 
     def test_otp_via_shared_secret(self):
         shared_secret = "ONSWG4TFOQYTEMY="
