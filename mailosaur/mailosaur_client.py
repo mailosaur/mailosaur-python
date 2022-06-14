@@ -44,8 +44,16 @@ class MailosaurClient(object):
             session, base_url, self.handle_http_error)
 
     def handle_http_error(self, response):
+        message = ""
         if response.status_code == 400:
-            raise MailosaurException("Request had one or more invalid parameters.",
+            try:
+                for error in response.json()['errors']:
+                    message += "(%s) %s\r\n" % (
+                        error['field'], error['detail'][0]['description'])
+            except:
+                message = "Request had one or more invalid parameters."
+
+            raise MailosaurException(message,
                                      "invalid_request", response.status_code, response.text)
         elif response.status_code == 401:
             raise MailosaurException("Authentication failed, check your API key.",
@@ -54,7 +62,7 @@ class MailosaurClient(object):
             raise MailosaurException("Insufficient permission to perform that task.",
                                      "permission_error", response.status_code, response.text)
         elif response.status_code == 404:
-            raise MailosaurException("Request did not find any matching resources.",
+            raise MailosaurException("Not found, check input parameters.",
                                      "invalid_request", response.status_code, response.text)
         else:
             raise MailosaurException("An API error occurred, see httpResponse for further information.",
