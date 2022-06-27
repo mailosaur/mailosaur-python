@@ -69,7 +69,7 @@ class ServersTest(TestCase):
 
         ex = context.exception
         self.assertEqual(
-            "(name) Please provide a name for your server\r\n", ex.message)
+            "(name) Servers need a name\r\n", ex.message)
         self.assertEqual("invalid_request", ex.error_type)
         self.assertEqual(400, ex.http_status_code)
         self.assertTrue("{\"type\":" in ex.http_response_body)

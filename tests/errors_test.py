@@ -31,4 +31,4 @@ class ErrorsTest(TestCase):
             client.servers.create(options)
 
         self.assertEqual(
-            '(name) Please provide a name for your server\r\n', context.exception.message)
+            '(name) Servers need a name\r\n', context.exception.message)
