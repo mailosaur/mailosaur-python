@@ -23,6 +23,7 @@ class MessageCreateOptions(object):
 
     def __init__(self, to, send, subject, text=None, html=None, attachments=None):
         self.to = to
+        self.sendFrom = None,
         self.send = send
         self.subject = subject
         self.text = text
