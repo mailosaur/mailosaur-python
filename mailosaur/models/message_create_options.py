@@ -6,6 +6,9 @@ class MessageCreateOptions(object):
 
     :param to: The email address to which the email will be sent. Must be a verified email address.
     :type to: str
+    :param sendFrom: Allows for the partial override of the message's 'from' address. This **must** be an
+     address ending with `YOUR_SERVER.mailosaur.net`, such as `my-emails@a1bcdef2.mailosaur.net`.
+    :type sendFrom: str
     :param send: If true, email will be sent upon creation.
     :type send: bool
     :param subject: The email subject line.
@@ -35,6 +38,7 @@ class MessageCreateOptions(object):
 
         return {
             'to': self.to,
+            'from': self.sendFrom,
             'send': self.send,
             'subject': self.subject,
             'text': self.text,
