@@ -7,6 +7,8 @@ class MessageSummary(object):
 
     :param id:
     :type id: str
+    :param type:
+    :type type: str
     :param server:
     :type server: str
     :param sender:
@@ -32,6 +34,7 @@ class MessageSummary(object):
             data = {}
 
         self.id = data.get('id', None)
+        self.type = data.get('type', None)
         self.server = data.get('server', None)
         self.sender = [MessageAddress(i) for i in data.get('from', [])]
         self.to = [MessageAddress(i) for i in data.get('to', [])]

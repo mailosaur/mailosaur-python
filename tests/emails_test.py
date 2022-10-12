@@ -338,6 +338,7 @@ class EmailsTest(TestCase):
         # self.assertEqual(email.subject, [h for h in headers if h.field.lower() == "subject"][0].value)
 
     def validate_metadata(self, email):
+        self.assertEqual("Email", email.type)
         self.assertEqual(1, len(email.sender))
         self.assertEqual(1, len(email.to))
         self.assertIsNotNone(email.sender[0].email)

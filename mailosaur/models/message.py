@@ -5,11 +5,14 @@ from .message_content import MessageContent
 from .attachment import Attachment
 from .metadata import Metadata
 
+
 class Message(object):
     """Message.
 
     :param id: Unique identifier for the message.
     :type id: str
+    :param type: The type of message.
+    :type type: str
     :param sender: The sender of the message.
     :type sender: list[~mailosaur.models.MessageAddress]
     :param to: The message’s recipient.
@@ -40,6 +43,7 @@ class Message(object):
             data = {}
 
         self.id = data.get('id', None)
+        self.type = data.get('type', None)
         self.sender = [MessageAddress(i) for i in data.get('from', [])]
         self.to = [MessageAddress(i) for i in data.get('to', [])]
         self.cc = [MessageAddress(i) for i in data.get('cc', [])]
