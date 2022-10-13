@@ -14,7 +14,7 @@ class MessagesOperations(object):
         self.base_url = base_url
         self.handle_http_error = handle_http_error
 
-    def get(self, server, criteria, timeout=10000, received_after=(datetime.today() - timedelta(hours=1))):
+    def get(self, server, criteria, timeout=10000, received_after=(datetime.today() - timedelta(hours=1)), dir=None):
         """Retrieve a message using search criteria.
 
         Returns as soon as a message matching the specified search criteria is
@@ -28,6 +28,9 @@ class MessagesOperations(object):
         :type timeout: int
         :param received_after: Limits results to only messages received after this date/time.
         :type received_after: datetime
+        :param dir: Optionally limits results based on the direction (`Sent` or `Received`),
+         with the default being `Received`.
+        :type dir: str
         :return: Message
         :rtype: ~mailosaur.models.Message
         :raises:
@@ -39,7 +42,7 @@ class MessagesOperations(object):
                 "Must provide a valid Server ID.", "invalid_request")
 
         result = self.search(server, criteria, 0, 1,
-                             timeout, received_after, True)
+                             timeout, received_after, True, dir)
         return self.get_by_id(result.items[0].id)
 
     def get_by_id(self, id):
@@ -86,7 +89,7 @@ class MessagesOperations(object):
             self.handle_http_error(response)
             return
 
-    def list(self, server, page=None, items_per_page=None, received_after=None):
+    def list(self, server, page=None, items_per_page=None, received_after=None, dir=None):
         """List all messages.
 
         Returns a list of your messages in summary form. The summaries are
@@ -103,6 +106,9 @@ class MessagesOperations(object):
         :type items_per_page: int   
         :param received_after: Limits results to only messages received after this date/time.
         :type received_after: datetime
+        :param dir: Optionally limits results based on the direction (`Sent` or `Received`),
+         with the default being `Received`.
+        :type dir: str
         :return: MessageListResult
         :rtype: ~mailosaur.models.MessageListResult
         :raises:
@@ -114,7 +120,7 @@ class MessagesOperations(object):
             received_after = received_after.astimezone().replace(microsecond=0).isoformat()
 
         params = {'server': server, 'page': page,
-                  'itemsPerPage': items_per_page, 'receivedAfter': received_after}
+                  'itemsPerPage': items_per_page, 'receivedAfter': received_after, 'dir': dir}
         response = self.session.get(url, params=params)
 
         if response.status_code not in [200]:
@@ -147,7 +153,7 @@ class MessagesOperations(object):
             self.handle_http_error(response)
             return
 
-    def search(self, server, criteria, page=None, items_per_page=None, timeout=None, received_after=None, error_on_timeout=True):
+    def search(self, server, criteria, page=None, items_per_page=None, timeout=None, received_after=None, error_on_timeout=True, dir=None):
         """Search for messages.
 
         Returns a list of messages matching the specified search criteria, in
@@ -171,6 +177,9 @@ class MessagesOperations(object):
         :param error_on_timeout: When set to false, an error will not be throw if timeout 
          is reached (default: true).
         :type error_on_timeout: bool
+        :param dir: Optionally limits results based on the direction (`Sent` or `Received`),
+         with the default being `Received`.
+        :type dir: str
         :return: MessageListResult
         :rtype: ~mailosaur.models.MessageListResult
         :raises:
@@ -182,7 +191,7 @@ class MessagesOperations(object):
             received_after = received_after.astimezone().replace(microsecond=0).isoformat()
 
         params = {'server': server, 'page': page,
-                  'itemsPerPage': items_per_page, 'receivedAfter': received_after}
+                  'itemsPerPage': items_per_page, 'receivedAfter': received_after, 'dir': dir}
 
         poll_count = 0
         start_time = datetime.today()
