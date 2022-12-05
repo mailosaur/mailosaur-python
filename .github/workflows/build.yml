@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04 # See https://github.com/actions/setup-python/issues/555#issuecomment-1337036543 
     timeout-minutes: 10
     strategy:
       max-parallel: 1
@@ -56,7 +56,7 @@ jobs:
   build-next:
     if: ${{ always() }}
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04 # See https://github.com/actions/setup-python/issues/555#issuecomment-1337036543 
     timeout-minutes: 10
     strategy:
       max-parallel: 1
