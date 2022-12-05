@@ -21,7 +21,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        python-version: '3.9'
+        python-version: ['3.9']
 
     env:
       MAILOSAUR_BASE_URL: https://mailosaur.com/
@@ -61,7 +61,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        python-version: '3.9'
+        python-version: ['3.9']
 
     env:
       MAILOSAUR_BASE_URL: https://next.mailosaur.com/
