@@ -21,9 +21,9 @@ class MessageCreateOptions(object):
     :type attachments: list[~mailosaur.models.Attachment]
     """
 
-    def __init__(self, to, send, subject, text=None, html=None, attachments=None):
+    def __init__(self, to, sendFrom, send, subject, text=None, html=None, attachments=None):
         self.to = to
-        self.sendFrom = None
+        self.sendFrom = sendFrom
         self.send = send
         self.subject = subject
         self.text = text
