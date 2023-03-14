@@ -33,9 +33,6 @@ class Attachment(object):
         self.length = data.get('length', None)
         self.url = data.get('url', None)
 
-    # You can optionally declare instance variables in the class body
-    text2: str
-
     def to_json(self):
         return {
             'contentType': self.content_type,

@@ -6,9 +6,6 @@ class MessageCreateOptions(object):
 
     :param to: The email address to which the email will be sent. Must be a verified email address.
     :type to: str
-    :param sendFrom: Allows for the partial override of the message's 'from' address. This **must** be an
-     address ending with `YOUR_SERVER.mailosaur.net`, such as `my-emails@a1bcdef2.mailosaur.net`.
-    :type sendFrom: str
     :param send: If true, email will be sent upon creation.
     :type send: bool
     :param subject: The email subject line.
@@ -19,16 +16,19 @@ class MessageCreateOptions(object):
     :type html: str
     :param attachments: Any message attachments.
     :type attachments: list[~mailosaur.models.Attachment]
+    :param sendFrom: Allows for the partial override of the message's 'from' address. This **must** be an
+     address ending with `YOUR_SERVER.mailosaur.net`, such as `my-emails@a1bcdef2.mailosaur.net`.
+    :type sendFrom: str
     """
 
-    def __init__(self, to, send, subject, text=None, html=None, attachments=None):
+    def __init__(self, to, send, subject, text=None, html=None, attachments=None, sendFrom=None):
         self.to = to
-        self.sendFrom = None
         self.send = send
         self.subject = subject
         self.text = text
         self.html = html
         self.attachments = attachments
+        self.sendFrom = sendFrom
 
     def to_json(self):
         attachments = []
