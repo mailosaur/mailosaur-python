@@ -2,6 +2,7 @@ import time
 from datetime import datetime, timedelta
 from ..models import MessageListResult
 from ..models import Message
+from ..models import PreviewListResult
 from ..models import MailosaurException
 
 
@@ -310,3 +311,28 @@ class MessagesOperations(object):
         data = response.json()
 
         return Message(data)
+
+    def generate_previews(self, id, options):
+        """Generate email previews.
+
+        Generates screenshots of an email rendered in the specified email clients.
+
+        :param id: The identifier of the email to preview.
+        :type id: str
+        :param options: The options with which to generate previews.
+        :type options: ~mailosaur.models.PreviewRequestOptions
+        :return: PreviewListResult
+        :rtype: ~mailosaur.models.PreviewListResult
+        :raises:
+         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        """
+        url = "%sapi/messages/%s/previews" % (self.base_url, id)
+        response = self.session.post(url, json=options.to_json())
+
+        if response.status_code not in [200]:
+            self.handle_http_error(response)
+            return
+
+        data = response.json()
+
+        return PreviewListResult(data)

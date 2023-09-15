@@ -1,5 +1,6 @@
 from ..models import MailosaurException
 
+
 class FilesOperations(object):
     """FilesOperations operations.
     """
@@ -24,7 +25,7 @@ class FilesOperations(object):
         """
         url = "%sapi/files/attachments/%s" % (self.base_url, id)
         response = self.session.get(url, stream=True)
-        
+
         if response.status_code not in [200]:
             self.handle_http_error(response)
             return
@@ -46,7 +47,29 @@ class FilesOperations(object):
         """
         url = "%sapi/files/email/%s" % (self.base_url, id)
         response = self.session.get(url, stream=True)
-        
+
+        if response.status_code not in [200]:
+            self.handle_http_error(response)
+            return
+
+        return response
+
+    def get_preview(self, id):
+        """Download an email preview.
+
+        Downloads a screenshot of your email rendered in a real email client. Simply supply
+        the unique identifier for the required preview.
+
+        :param id: The identifier of the email preview to be downloaded.
+        :type id: str
+        :return: object
+        :rtype: Generator
+        :raises:
+         :class:`HttpOperationError<msrest.exceptions.HttpOperationError>`
+        """
+        url = "%sapi/files/previews/%s" % (self.base_url, id)
+        response = self.session.get(url, stream=True)
+
         if response.status_code not in [200]:
             self.handle_http_error(response)
             return

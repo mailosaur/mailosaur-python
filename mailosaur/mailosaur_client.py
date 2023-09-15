@@ -17,6 +17,7 @@ from .operations.analysis_operations import AnalysisOperations
 from .operations.files_operations import FilesOperations
 from .operations.usage_operations import UsageOperations
 from .operations.devices_operations import DevicesOperations
+from .operations.previews_operations import PreviewsOperations
 from .models.mailosaur_exception import MailosaurException
 
 
@@ -41,6 +42,8 @@ class MailosaurClient(object):
         self.files = FilesOperations(session, base_url, self.handle_http_error)
         self.usage = UsageOperations(session, base_url, self.handle_http_error)
         self.devices = DevicesOperations(
+            session, base_url, self.handle_http_error)
+        self.previews = PreviewsOperations(
             session, base_url, self.handle_http_error)
 
     def handle_http_error(self, response):

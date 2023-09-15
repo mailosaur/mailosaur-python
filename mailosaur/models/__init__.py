@@ -28,6 +28,10 @@ from .device import Device
 from .device_list_result import DeviceListResult
 from .device_create_options import DeviceCreateOptions
 from .otp_result import OtpResult
+from .preview_list_result import PreviewListResult
+from .preview_email_client_list_result import PreviewEmailClientListResult
+from .preview_request import PreviewRequest
+from .preview_request_options import PreviewRequestOptions
 
 __all__ = [
     'SpamAssassinRule',
@@ -48,6 +52,7 @@ __all__ = [
     'MessageCreateOptions',
     'MessageForwardOptions',
     'MessageReplyOptions',
+    'PreviewRequestOptions',
     'SearchCriteria',
     'Server',
     'ServerListResult',
@@ -59,5 +64,9 @@ __all__ = [
     'Device',
     'DeviceListResult',
     'DeviceCreateOptions',
-    'OtpResult'
+    'OtpResult',
+    'PreviewListResult',
+    'PreviewEmailClientListResult',
+    'PreviewRequest',
+    'PreviewRequestOptions'
 ]
