@@ -228,7 +228,7 @@ class MessagesOperations(object):
                     return result
                 else:
                     raise MailosaurException(
-                        "No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).", "search_timeout")
+                        "No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this). The search criteria used for this query was [%s] which timed out after %sms" % (criteria.to_json(), timeout), "search_timeout")
 
             time.sleep(delay / 1000)
 

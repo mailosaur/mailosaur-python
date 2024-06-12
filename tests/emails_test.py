@@ -55,7 +55,7 @@ class EmailsTest(TestCase):
         email = self.client.messages.get(self.server, criteria)
         self.validate_email(email)
 
-    def test_get(self):
+    def test_get_by_id(self):
         email_to_retrieve = self.emails[0]
         email = self.client.messages.get_by_id(email_to_retrieve.id)
         self.validate_email(email)
