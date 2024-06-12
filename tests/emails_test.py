@@ -134,7 +134,7 @@ class EmailsTest(TestCase):
         criteria.body = "this is a link"
         criteria.match = "ANY"
         results = self.client.messages.search(self.server, criteria).items
-        self.assertEqual(4, len(results))
+        self.assertEqual(5, len(results))
 
     def test_search_with_special_characters(self):
         criteria = SearchCriteria()
