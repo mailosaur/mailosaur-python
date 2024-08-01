@@ -5,8 +5,17 @@ from mailosaur.models import ServerCreateOptions, MailosaurException
 
 
 class ErrorsTest(TestCase):
+    @classmethod
+    def setUpClass(self):
+        api_key = os.getenv('MAILOSAUR_API_KEY')
+        base_url = os.getenv('MAILOSAUR_BASE_URL')
+
+        if api_key is None:
+            raise Exception(
+                "Missing necessary environment variables - refer to README.md")
+
     def test_unauthorized(self):
-        client = MailosaurClient('invalid_key')
+        client = MailosaurClient('invalid_key', self.base_url)
 
         with self.assertRaises(MailosaurException) as context:
             client.servers.list()
@@ -15,7 +24,7 @@ class ErrorsTest(TestCase):
             'Authentication failed, check your API key.', context.exception.message)
 
     def test_not_found(self):
-        client = MailosaurClient(os.getenv('MAILOSAUR_API_KEY'))
+        client = MailosaurClient(self.api_key, self.base_url)
 
         with self.assertRaises(MailosaurException) as context:
             client.servers.get('not_found')
@@ -24,7 +33,7 @@ class ErrorsTest(TestCase):
             'Not found, check input parameters.', context.exception.message)
 
     def test_bad_request(self):
-        client = MailosaurClient(os.getenv('MAILOSAUR_API_KEY'))
+        client = MailosaurClient(self.api_key, self.base_url)
 
         with self.assertRaises(MailosaurException) as context:
             options = ServerCreateOptions()
