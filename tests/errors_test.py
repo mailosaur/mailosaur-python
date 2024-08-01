@@ -7,10 +7,10 @@ from mailosaur.models import ServerCreateOptions, MailosaurException
 class ErrorsTest(TestCase):
     @classmethod
     def setUpClass(self):
-        api_key = os.getenv('MAILOSAUR_API_KEY')
-        base_url = os.getenv('MAILOSAUR_BASE_URL')
+        self.api_key = os.getenv('MAILOSAUR_API_KEY')
+        self.base_url = os.getenv('MAILOSAUR_BASE_URL')
 
-        if api_key is None:
+        if self.api_key is None:
             raise Exception(
                 "Missing necessary environment variables - refer to README.md")
 
