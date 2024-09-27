@@ -1,5 +1,6 @@
 from ..models import SpamAnalysisResult
 from ..models import MailosaurException
+from ..models import DeliverabilityReport
 
 class AnalysisOperations(object):
     """AnalysisOperations operations.
@@ -32,3 +33,27 @@ class AnalysisOperations(object):
         data = response.json()
 
         return SpamAnalysisResult(data)
+
+    def deliverability(self, email):
+        """Perform a deliverability test.
+
+        Perform deliverability testing on the specified email.
+
+        :param email: The identifier of the email to be analyzed.
+        :type email: str        
+        :return: DeliverabilityReport
+        :rtype: ~mailosaur.models.DeliverabilityReport
+        :raises:
+         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        """
+        url = "%sapi/analysis/deliverability/%s" % (self.base_url, email)
+        response = self.session.get(url)
+        
+        if response.status_code not in [200]:
+            self.handle_http_error(response)
+            return
+
+        data = response.json()
+
+        return DeliverabilityReport(data)
+

@@ -1,6 +1,7 @@
 from .spam_assassin_rule import SpamAssassinRule
 from .spam_filter_results import SpamFilterResults
 from .spam_analysis_result import SpamAnalysisResult
+from .deliverability_report import DeliverabilityReport
 from .mailosaur_exception import MailosaurException
 from .message_address import MessageAddress
 from .link import Link
@@ -37,6 +38,7 @@ __all__ = [
     'SpamAssassinRule',
     'SpamFilterResults',
     'SpamAnalysisResult',
+    'DeliverabilityReport',
     'MailosaurException',
     'MessageAddress',
     'Link',

@@ -150,6 +150,39 @@ class EmailsTest(TestCase):
             self.assertIsNotNone(rule.rule)
             self.assertIsNotNone(rule.description)
 
+    def test_deliverability_report(self):
+        target_id = self.emails[0].id
+        result = self.client.analysis.deliverability(target_id)
+
+        self.assertIsNotNone(result)
+
+        self.assertIsNotNone(result.spf)
+
+        self.assertIsNotNone(result.dmarc)
+        for dkim in result.dkim:
+            self.assertIsNotNone(dkim)
+
+        self.assertIsNotNone(result.dmarc)
+
+        self.assertIsNotNone(result.block_lists)
+        for block_list in result.block_lists:
+            self.assertIsNotNone(block_list.id)
+            self.assertIsNotNone(block_list.name)
+
+        self.assertIsNotNone(result.content)
+        
+        self.assertIsNotNone(result.dns_records)
+        self.assertIsNotNone(result.dns_records.a)
+        self.assertIsNotNone(result.dns_records.mx)
+        self.assertIsNotNone(result.dns_records.ptr)
+
+        self.assertIsNotNone(result.spam_assassin)
+        self.assertIsNotNone(result.spam_assassin.result)
+        self.assertIsNotNone(result.spam_assassin.score)
+        for rule in result.spam_assassin.rules:
+            self.assertIsNotNone(rule.rule)
+            self.assertIsNotNone(rule.description)
+
     def test_delete(self):
         target_email_id = self.emails[4].id
 
