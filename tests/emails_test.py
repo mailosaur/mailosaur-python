@@ -41,7 +41,7 @@ class EmailsTest(TestCase):
         self.assertTrue(len(past_emails) > 0)
 
         future_emails = self.client.messages.list(
-            self.server, received_after=datetime.today()).items
+            self.server, received_after=datetime.today() + timedelta(seconds=1)).items
         self.assertEqual(0, len(future_emails))
 
     def test_get(self):
@@ -214,6 +214,21 @@ class EmailsTest(TestCase):
         self.assertIsNotNone(message.id)
         self.assertEqual(subject, message.subject)
 
+    def test_create_and_send_with_cc(self):
+        if self.verified_domain is None:
+            pytest.skip("Requires verified domain secret")
+
+        subject = "CC message"
+        ccRecipient = "someoneelse@%s" % (self.verified_domain)
+        options = MessageCreateOptions(
+            "anything@%s" % (self.verified_domain), True,  subject, html="<p>This is a new email.</p>", cc=ccRecipient)
+        message = self.client.messages.create(self.server, options)
+
+        self.assertIsNotNone(message.id)
+        self.assertEqual(subject, message.subject)
+        self.assertEqual(1, len(message.cc))
+        self.assertEqual(ccRecipient, message.cc[0].email)
+
     def test_create_and_send_with_attachment(self):
         if self.verified_domain is None:
             pytest.skip("Requires verified domain secret")
@@ -261,6 +276,22 @@ class EmailsTest(TestCase):
         self.assertIsNotNone(message.id)
         self.assertTrue(body in message.html.body)
 
+    def test_forward_with_cc(self):
+        if self.verified_domain is None:
+            pytest.skip("Requires verified domain secret")
+
+        ccRecipient = "someoneelse@%s" % (self.verified_domain)
+
+        body = "<p>Forwarded <strong>HTML</strong> message.</p>"
+        options = MessageForwardOptions(
+            "forwardcc@%s" % (self.verified_domain), html=body, cc=ccRecipient)
+        message = self.client.messages.forward(self.emails[0].id, options)
+
+        self.assertIsNotNone(message.id)
+        self.assertTrue(body in message.html.body)
+        self.assertEqual(1, len(message.cc))
+        self.assertEqual(ccRecipient, message.cc[0].email)
+
     def test_reply_with_text(self):
         if self.verified_domain is None:
             pytest.skip("Requires verified domain secret")
@@ -280,6 +311,21 @@ class EmailsTest(TestCase):
         message = self.client.messages.reply(self.emails[0].id, options)
         self.assertIsNotNone(message.id)
         self.assertTrue(body in message.html.body)
+
+    def test_reply_with_cc(self):
+        if self.verified_domain is None:
+            pytest.skip("Requires verified domain secret")
+
+        body = "<p>Reply <strong>HTML</strong> message body.</p>"
+        ccRecipient = "someoneelse@%s" % (self.verified_domain)
+
+        options = MessageReplyOptions(html=body, cc=ccRecipient)
+        message = self.client.messages.reply(self.emails[0].id, options)
+
+        self.assertIsNotNone(message.id)
+        self.assertTrue(body in message.html.body)
+        self.assertEqual(1, len(message.cc))
+        self.assertEqual(ccRecipient, message.cc[0].email)
 
     def test_reply_with_attachment(self):
         if self.verified_domain is None:

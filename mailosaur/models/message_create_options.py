@@ -6,6 +6,8 @@ class MessageCreateOptions(object):
 
     :param to: The email address to which the email will be sent. Must be a verified email address.
     :type to: str
+    :param cc: The email address to which the email will be CC'd. Must be a verified email address.
+    :type cc: str
     :param send: If true, email will be sent upon creation.
     :type send: bool
     :param subject: The email subject line.
@@ -21,8 +23,9 @@ class MessageCreateOptions(object):
     :type sendFrom: str
     """
 
-    def __init__(self, to, send, subject, text=None, html=None, attachments=None, sendFrom=None):
+    def __init__(self, to, send, subject, text=None, html=None, attachments=None, sendFrom=None, cc=None):
         self.to = to
+        self.cc = cc
         self.send = send
         self.subject = subject
         self.text = text
@@ -39,6 +42,7 @@ class MessageCreateOptions(object):
 
         return {
             'to': self.to,
+            'cc': self.cc,
             'from': self.sendFrom,
             'send': self.send,
             'subject': self.subject,
