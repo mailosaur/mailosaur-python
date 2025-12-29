@@ -30,8 +30,8 @@ from .device_list_result import DeviceListResult
 from .device_create_options import DeviceCreateOptions
 from .otp_result import OtpResult
 from .preview_list_result import PreviewListResult
-from .preview_email_client_list_result import PreviewEmailClientListResult
-from .preview_request import PreviewRequest
+from .email_client_list_result import EmailClientListResult
+from .email_client import EmailClient
 from .preview_request_options import PreviewRequestOptions
 
 __all__ = [
@@ -68,7 +68,7 @@ __all__ = [
     'DeviceCreateOptions',
     'OtpResult',
     'PreviewListResult',
-    'PreviewEmailClientListResult',
-    'PreviewRequest',
+    'EmailClientListResult',
+    'EmailClient',
     'PreviewRequestOptions'
 ]

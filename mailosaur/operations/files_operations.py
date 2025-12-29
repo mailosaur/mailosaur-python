@@ -1,4 +1,6 @@
 from ..models import MailosaurException
+import time
+from datetime import datetime
 
 
 class FilesOperations(object):
@@ -67,11 +69,34 @@ class FilesOperations(object):
         :raises:
          :class:`HttpOperationError<msrest.exceptions.HttpOperationError>`
         """
-        url = "%sapi/files/previews/%s" % (self.base_url, id)
-        response = self.session.get(url, stream=True)
+        timeout = 120000
+        poll_count = 0
+        start_time = datetime.today()
 
-        if response.status_code not in [200]:
-            self.handle_http_error(response)
-            return
+        while True:
+            url = "%sapi/files/screenshots/%s" % (self.base_url, id)
+            response = self.session.get(url, stream=True)
 
-        return response
+            if response.status_code == 200:
+                return response
+
+            if response.status_code not in [202]:
+                self.handle_http_error(response)
+                return
+
+            # List conversion necessary for Python 3 compatibility
+            # https://stackoverflow.com/questions/36982858/object-of-type-map-has-no-len-in-python-3
+            delay_pattern = list(
+                map(int, (response.headers.get('x-ms-delay') or '1000').split(',')))
+
+            delay = delay_pattern[len(
+                delay_pattern) - 1] if poll_count >= len(delay_pattern) else delay_pattern[poll_count]
+
+            poll_count += 1
+
+            # Stop if timeout will be exceeded
+            if ((1000 * (datetime.today() - start_time).total_seconds()) + delay) > timeout:
+                raise MailosaurException(
+                    "An email preview was not generated in time. The email client may not be available, or the preview ID [%s] may be incorrect." % id, "preview_timeout")
+
+            time.sleep(delay / 1000)

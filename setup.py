@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='mailosaur',
-    version='7.0.0',
+    version='8.0.0',
     description='The Mailosaur Python library lets you integrate email and SMS testing into your continuous integration process.',
     long_description=long_description,
     long_description_content_type='text/markdown',
