@@ -326,7 +326,7 @@ class MessagesOperations(object):
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%sapi/messages/%s/previews" % (self.base_url, id)
+        url = "%sapi/messages/%s/screenshots" % (self.base_url, id)
         response = self.session.post(url, json=options.to_json())
 
         if response.status_code not in [200]:

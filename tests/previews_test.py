@@ -5,7 +5,7 @@ import string
 import random
 from .mailer import Mailer
 from mailosaur import MailosaurClient
-from mailosaur.models import SearchCriteria, PreviewRequest, PreviewRequestOptions, MailosaurException
+from mailosaur.models import SearchCriteria, PreviewRequestOptions, MailosaurException
 
 
 class PreviewsTest(TestCase):
@@ -13,9 +13,9 @@ class PreviewsTest(TestCase):
     def setUpClass(cls):
         api_key = os.getenv('MAILOSAUR_API_KEY')
         base_url = os.getenv('MAILOSAUR_BASE_URL')
-        cls.server = os.getenv('MAILOSAUR_PREVIEWS_SERVER')
+        cls.server = os.getenv('MAILOSAUR_SERVER')
 
-        if api_key is None:
+        if api_key is None or cls.server is None:
             raise Exception(
                 "Missing necessary environment variables - refer to README.md")
 
@@ -27,9 +27,6 @@ class PreviewsTest(TestCase):
         self.assertTrue(len(result.items) > 1)
 
     def test_generate_previews(self):
-        if self.server is None:
-            pytest.skip("Requires server with previews enabled")
-
         random_string = ''.join(random.choice(
             string.ascii_uppercase + string.ascii_lowercase) for _ in range(10))
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')
@@ -42,8 +39,7 @@ class PreviewsTest(TestCase):
         criteria.sent_to = test_email_address
         email = self.client.messages.get(self.server, criteria)
 
-        request = PreviewRequest("OL2021")
-        options = PreviewRequestOptions([request])
+        options = PreviewRequestOptions(["iphone-16plus-applemail-lightmode-portrait"])
 
         result = self.client.messages.generate_previews(
             email.id, options)

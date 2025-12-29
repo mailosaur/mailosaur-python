@@ -1,4 +1,4 @@
-from ..models import PreviewEmailClientListResult
+from ..models import EmailClientListResult
 
 
 class PreviewsOperations(object):
@@ -15,12 +15,12 @@ class PreviewsOperations(object):
 
         Returns a list of available email clients.
 
-        :return: PreviewEmailClientListResult
-        :rtype: ~mailosaur.models.PreviewEmailClientListResult
+        :return: EmailClientListResult
+        :rtype: ~mailosaur.models.EmailClientListResult
         :raises:
          :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
-        url = "%sapi/previews/clients" % (self.base_url)
+        url = "%sapi/screenshots/clients" % (self.base_url)
         response = self.session.get(url)
 
         if response.status_code not in [200]:
@@ -29,4 +29,4 @@ class PreviewsOperations(object):
 
         data = response.json()
 
-        return PreviewEmailClientListResult(data)
+        return EmailClientListResult(data)

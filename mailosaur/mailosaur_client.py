@@ -28,7 +28,7 @@ class MailosaurClient(object):
         """ Pass in your mailbox id and api key to authenticate """
         session = requests.Session()
         session.auth = (api_key, '')
-        session.headers.update({'User-Agent': 'mailosaur-python/7.0.0'})
+        session.headers.update({'User-Agent': 'mailosaur-python/8.0.0'})
 
         if base_url is None:
             base_url = "https://mailosaur.com/"
@@ -67,6 +67,9 @@ class MailosaurClient(object):
         elif response.status_code == 404:
             raise MailosaurException("Not found, check input parameters.",
                                      "invalid_request", response.status_code, response.text)
+        elif response.status_code == 410:
+            raise MailosaurException("Permanently expired or deleted.",
+                                     "gone", response.status_code, response.text)
         else:
             raise MailosaurException("An API error occurred, see httpResponse for further information.",
                                      "api_error", response.status_code, response.text)
