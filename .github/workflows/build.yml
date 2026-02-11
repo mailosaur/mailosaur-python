@@ -14,9 +14,12 @@ concurrency:
   group: mailosaur-python
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.LINUX }}
     timeout-minutes: 10
     strategy:
       max-parallel: 1
@@ -32,7 +35,14 @@ jobs:
       MAILOSAUR_VERIFIED_DOMAIN: ${{ secrets.MAILOSAUR_VERIFIED_DOMAIN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Checkout custom actions
+        uses: actions/checkout@v4
+        with:
+          repository: mailosaur/actions
+          token: ${{ secrets.CUSTOM_ACTIONS_TOKEN }}
+          path: .github/actions
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -44,19 +54,16 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
-      - name: Notify on Failure
-        uses: skitionek/notify-microsoft-teams@master
-        if: ${{ failure() }}
+      - name: Send notifications
+        if: ${{ always() }}
+        uses: ./.github/actions/notify
         with:
-          webhook_url: ${{ secrets.TEAMS_BUILDS_WEBHOOK }}
-          needs: ${{ toJson(needs) }}
-          job: ${{ toJson(job) }}
-          overwrite: "{ title: `${workflow} failed for ${repository.name}` }"
+          webhook-url: ${{ secrets.NOTIFICATION_URL }}
 
   build-next:
     if: ${{ always() }}
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.LINUX }}
     timeout-minutes: 10
     strategy:
       max-parallel: 1
@@ -72,7 +79,14 @@ jobs:
       MAILOSAUR_VERIFIED_DOMAIN: ${{ secrets.MAILOSAUR_VERIFIED_DOMAIN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout source code
+        uses: actions/checkout@v4
+      - name: Checkout custom actions
+        uses: actions/checkout@v4
+        with:
+          repository: mailosaur/actions
+          token: ${{ secrets.CUSTOM_ACTIONS_TOKEN }}
+          path: .github/actions
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -84,11 +98,8 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
-      - name: Notify on Failure
-        uses: skitionek/notify-microsoft-teams@master
-        if: ${{ failure() }}
+      - name: Send notifications
+        if: ${{ always() }}
+        uses: ./.github/actions/notify
         with:
-          webhook_url: ${{ secrets.TEAMS_BUILDS_WEBHOOK }}
-          needs: ${{ toJson(needs) }}
-          job: ${{ toJson(job) }}
-          overwrite: "{ title: `${workflow} failed for ${repository.name}` }"
+          webhook-url: ${{ secrets.NOTIFICATION_URL }}
