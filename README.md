@@ -10,17 +10,30 @@ Mailosaur lets you automate email and SMS tests as part of software development 
 
 This guide provides several key sections:
 
+- [Mailosaur - Python library · ](#mailosaur---python-library--)
   - [Get Started](#get-started)
+  - [Installation](#installation)
+    - [Set your API key](#set-your-api-key)
+    - [Create your code](#create-your-code)
+    - [API Reference](#api-reference)
   - [Creating an account](#creating-an-account)
   - [Test email addresses with Mailosaur](#test-email-addresses-with-mailosaur)
   - [Find an email](#find-an-email)
+    - [What is this code doing?](#what-is-this-code-doing)
   - [Find an SMS message](#find-an-sms-message)
   - [Testing plain text content](#testing-plain-text-content)
+    - [Extracting verification codes from plain text](#extracting-verification-codes-from-plain-text)
   - [Testing HTML content](#testing-html-content)
+    - [Working with HTML using Beautiful Soup](#working-with-html-using-beautiful-soup)
   - [Working with hyperlinks](#working-with-hyperlinks)
+    - [Links in plain text (including SMS messages)](#links-in-plain-text-including-sms-messages)
   - [Working with attachments](#working-with-attachments)
   - [Working with images and web beacons](#working-with-images-and-web-beacons)
+    - [Remotely-hosted images](#remotely-hosted-images)
+    - [Triggering web beacons](#triggering-web-beacons)
   - [Spam checking](#spam-checking)
+  - [Development](#development)
+  - [Contacting us](#contacting-us)
 
 You can find the full [Mailosaur documentation](https://mailosaur.com/docs/) on the website.
 
@@ -32,11 +45,21 @@ If you get stuck, just contact us at support@mailosaur.com.
 pip install --upgrade mailosaur
 ```
 
-Then import the library into your code. The value for `YOUR_API_KEY` is covered in the next step ([creating an account](#creating-an-account)):
+### Set your API key
+
+Get your API key from the Mailosaur Dashboard and set it as an environment variable:
+
+```sh
+export MAILOSAUR_API_KEY='your-api-key-here'
+```
+
+### Create your code
+
+Then import the library and create a client:
 
 ```py
 from mailosaur import MailosaurClient
-mailosaur = MailosaurClient("YOUR_API_KEY")
+mailosaur = MailosaurClient()
 ```
 
 ### API Reference
@@ -80,7 +103,7 @@ In automated tests you will want to wait for a new email to arrive. This library
 from mailosaur import MailosaurClient
 from mailosaur.models import SearchCriteria
 
-mailosaur = MailosaurClient("API_KEY")
+mailosaur = MailosaurClient()
 
 # See https://mailosaur.com/app/project/api
 server_id = "abc123"
@@ -96,7 +119,7 @@ print(email.subject) # "Hello world!"
 
 ### What is this code doing?
 
-1. Sets up an instance of `MailosaurClient` with your API key.
+1. Sets up an instance of `MailosaurClient` using the `MAILOSAUR_API_KEY` environment variable.
 2. Waits for an email to arrive at the server with ID `abc123`.
 3. Outputs the subject line of the email.
 
@@ -110,7 +133,7 @@ If your account has [SMS testing](https://mailosaur.com/sms-testing/) enabled, y
 from mailosaur import MailosaurClient
 from mailosaur.models import SearchCriteria
 
-mailosaur = MailosaurClient("API_KEY")
+mailosaur = MailosaurClient()
 
 # See https://mailosaur.com/app/project/api
 server_id = "abc123"

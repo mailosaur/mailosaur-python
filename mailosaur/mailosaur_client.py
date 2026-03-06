@@ -8,6 +8,7 @@
     More options at https://mailosaur.com/docs/email/
 """
 
+import os
 import uuid
 import requests
 
@@ -24,8 +25,15 @@ from .models.mailosaur_exception import MailosaurException
 class MailosaurClient(object):
     """ Main class to access Mailosaur.com api. """
 
-    def __init__(self, api_key, base_url="https://mailosaur.com/"):
+    def __init__(self, api_key=None, base_url="https://mailosaur.com/"):
         """ Pass in your mailbox id and api key to authenticate """
+        api_key = api_key or os.environ.get('MAILOSAUR_API_KEY')
+
+        if not api_key:
+            raise ValueError(
+                "'api_key' must be set via the MAILOSAUR_API_KEY environment "
+                "variable, or passed to the MailosaurClient constructor.")
+
         session = requests.Session()
         session.auth = (api_key, '')
         session.headers.update({'User-Agent': 'mailosaur-python/8.0.0'})

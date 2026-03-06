@@ -7,14 +7,13 @@ from mailosaur.models import SearchCriteria, MailosaurException
 class EmailsTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        api_key = os.getenv('MAILOSAUR_API_KEY')
         base_url = os.getenv('MAILOSAUR_BASE_URL')
         cls.server = os.getenv('MAILOSAUR_SERVER')
 
-        if (api_key or cls.server) is None:
+        if cls.server is None:
             raise Exception("Missing necessary environment variables - refer to README.md")
 
-        cls.client = MailosaurClient(api_key, base_url)
+        cls.client = MailosaurClient(base_url=base_url)
 
         cls.client.messages.delete_all(cls.server)
 
