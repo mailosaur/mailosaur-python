@@ -11,15 +11,14 @@ from mailosaur.models import SearchCriteria, PreviewRequestOptions, MailosaurExc
 class PreviewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        api_key = os.getenv('MAILOSAUR_API_KEY')
         base_url = os.getenv('MAILOSAUR_BASE_URL')
         cls.server = os.getenv('MAILOSAUR_SERVER')
 
-        if api_key is None or cls.server is None:
+        if cls.server is None:
             raise Exception(
                 "Missing necessary environment variables - refer to README.md")
 
-        cls.client = MailosaurClient(api_key, base_url)
+        cls.client = MailosaurClient(base_url=base_url)
 
     def test_list_clients(self):
         result = self.client.previews.list_email_clients()

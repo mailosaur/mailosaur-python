@@ -8,14 +8,9 @@ from mailosaur.models import ServerCreateOptions, MailosaurException
 class ServersTest(TestCase):
     @classmethod
     def setUpClass(self):
-        api_key = os.getenv('MAILOSAUR_API_KEY')
         base_url = os.getenv('MAILOSAUR_BASE_URL')
 
-        if api_key is None:
-            raise Exception(
-                "Missing necessary environment variables - refer to README.md")
-
-        self.client = MailosaurClient(api_key, base_url)
+        self.client = MailosaurClient(base_url=base_url)
 
     def test_list(self):
         result = self.client.servers.list()
