@@ -179,18 +179,15 @@ if "Jason" in message.text.body:
 
 ### Extracting verification codes from plain text
 
-You may have an email or SMS message that contains an account verification code, or some other one-time passcode. You can extract content like this using a simple regex.
-
-Here is how to extract a 6-digit numeric code:
+You may have an email or SMS message that contains an account verification code, or some other one-time passcode. Mailosaur automatically extracts these for you and makes them available via the `codes` array on the message content:
 
 ```py
 print(message.text.body) # "Your access code is 243546."
 
-match = re.search("([0-9]{6})", message.text.body)
-print(match.group()) # "243546"
+print(message.text.codes[0].value) # "243546"
 ```
 
-[Read more](https://mailosaur.com/docs/test-cases/text-content/)
+[Read more](https://mailosaur.com/docs/automation/codes)
 
 ## Testing HTML content
 
