@@ -4,7 +4,9 @@ from datetime import datetime
 
 
 class FilesOperations(object):
-    """FilesOperations operations.
+    """Operations for downloading the raw content associated with a message - file
+    attachments, the full EML source of an email, and rendered email previews.
+    Accessed via ``client.files``.
     """
 
     def __init__(self, session, base_url, handle_http_error):
@@ -13,17 +15,12 @@ class FilesOperations(object):
         self.handle_http_error = handle_http_error
 
     def get_attachment(self, id):
-        """Download an attachment.
+        """Downloads a single attachment.
 
-        Downloads a single attachment. Simply supply the unique identifier for
-        the required attachment.
-
-        :param id: The identifier of the attachment to be downloaded.
+        :param id: The identifier for the required attachment.
         :type id: str
-        :return: object
-        :rtype: Generator
-        :raises:
-         :class:`HttpOperationError<msrest.exceptions.HttpOperationError>`
+        :return: A streamed response whose body contains the attachment's binary content.
+        :rtype: ~requests.Response
         """
         url = "%sapi/files/attachments/%s" % (self.base_url, id)
         response = self.session.get(url, stream=True)
@@ -35,17 +32,12 @@ class FilesOperations(object):
         return response
 
     def get_email(self, id):
-        """Download EML.
+        """Downloads an EML file representing the specified email.
 
-        Downloads an EML file representing the specified email. Simply supply
-        the unique identifier for the required email.
-
-        :param id: The identifier of the email to be downloaded.
+        :param id: The identifier for the required message.
         :type id: str
-        :return: object
-        :rtype: Generator
-        :raises:
-         :class:`HttpOperationError<msrest.exceptions.HttpOperationError>`
+        :return: A streamed response whose body contains the raw EML content of the email.
+        :rtype: ~requests.Response
         """
         url = "%sapi/files/email/%s" % (self.base_url, id)
         response = self.session.get(url, stream=True)
@@ -57,17 +49,17 @@ class FilesOperations(object):
         return response
 
     def get_preview(self, id):
-        """Download an email preview.
+        """Downloads a screenshot of your email rendered in a real email client.
 
-        Downloads a screenshot of your email rendered in a real email client. Simply supply
-        the unique identifier for the required preview.
+        Simply supply the unique identifier for the required preview.
 
         :param id: The identifier of the email preview to be downloaded.
         :type id: str
-        :return: object
-        :rtype: Generator
-        :raises:
-         :class:`HttpOperationError<msrest.exceptions.HttpOperationError>`
+        :return: A streamed response whose body contains the preview screenshot image.
+        :rtype: ~requests.Response
+        :raises: :class:`MailosaurException<mailosaur.models.MailosaurException>`
+         with error type ``preview_timeout`` if the preview is not generated
+         within the time limit.
         """
         timeout = 120000
         poll_count = 0

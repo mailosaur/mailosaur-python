@@ -23,10 +23,38 @@ from .models.mailosaur_exception import MailosaurException
 
 
 class MailosaurClient(object):
-    """ Main class to access Mailosaur.com api. """
+    """The Mailosaur client - the main entry point to the Mailosaur API.
+
+    Construct an instance with your API key (or set the ``MAILOSAUR_API_KEY``
+    environment variable), then use the operations namespaces (``messages``,
+    ``servers``, ``files``, ``devices``, ``analysis``, ``previews``, ``usage``)
+    to automate email and SMS testing.
+
+    :ivar analysis: Operations for analyzing email content and deliverability, including spam scoring.
+    :vartype analysis: ~mailosaur.operations.analysis_operations.AnalysisOperations
+    :ivar files: Operations for downloading attachments, EML source, and email preview screenshots.
+    :vartype files: ~mailosaur.operations.files_operations.FilesOperations
+    :ivar messages: Operations for finding, retrieving, creating, and managing email and SMS messages.
+    :vartype messages: ~mailosaur.operations.messages_operations.MessagesOperations
+    :ivar servers: Operations for creating and managing your Mailosaur servers (virtual inboxes).
+    :vartype servers: ~mailosaur.operations.servers_operations.ServersOperations
+    :ivar usage: Operations for inspecting account usage limits and recent transactional usage.
+    :vartype usage: ~mailosaur.operations.usage_operations.UsageOperations
+    :ivar devices: Operations for managing virtual security devices and retrieving their one-time passwords.
+    :vartype devices: ~mailosaur.operations.devices_operations.DevicesOperations
+    :ivar previews: Operations for discovering the email clients available for generating email previews.
+    :vartype previews: ~mailosaur.operations.previews_operations.PreviewsOperations
+    """
 
     def __init__(self, api_key=None, base_url="https://mailosaur.com/"):
-        """ Pass in your mailbox id and api key to authenticate """
+        """Returns an instance of the Mailosaur client.
+
+        :param api_key: Optional API key. Overrides the MAILOSAUR_API_KEY
+         environment variable if set.
+        :type api_key: str
+        :param base_url: Optionally overrides the base URL of the Mailosaur service.
+        :type base_url: str
+        """
         api_key = api_key or os.environ.get('MAILOSAUR_API_KEY')
 
         if not api_key:

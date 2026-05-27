@@ -3,7 +3,9 @@ from ..models import UsageTransactionListResult
 from ..models import MailosaurException
 
 class UsageOperations(object):
-    """UsageOperations operations.
+    """Operations for inspecting your account's usage limits and recent transactional
+    usage. These endpoints require authentication with an account-level API key.
+    Accessed via ``client.usage``.
     """
 
     def __init__(self, session, base_url, handle_http_error):
@@ -14,12 +16,11 @@ class UsageOperations(object):
     def limits(self):
         """Retrieve account usage limits.
 
-        Details the current limits and usage for your account.
+        Details the current limits and usage for your account. This endpoint
+        requires authentication with an account-level API key.
 
-        :return: UsageAccountLimits
+        :return: The usage limits for your account.
         :rtype: ~mailosaur.models.UsageAccountLimits
-        :raises:
-        :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/usage/limits" % (self.base_url)
         response = self.session.get(url)
@@ -35,12 +36,10 @@ class UsageOperations(object):
     def transactions(self):
         """Retrieves the last 31 days of transactional usage.
 
-        Details the usage transactions processed by Mailosaur in the last 31 days.
+        This endpoint requires authentication with an account-level API key.
 
-        :return: UsageTransactionListResult
+        :return: The transactional usage for the last 31 days.
         :rtype: ~mailosaur.models.UsageTransactionListResult
-        :raises:
-        :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/usage/transactions" % (self.base_url)
         response = self.session.get(url)

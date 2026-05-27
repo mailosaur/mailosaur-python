@@ -2,7 +2,9 @@ from ..models import EmailClientListResult
 
 
 class PreviewsOperations(object):
-    """PreviewsOperations operations.
+    """Operations for discovering the email clients available for generating email
+    previews (screenshots of an email rendered in real clients).
+    Accessed via ``client.previews``.
     """
 
     def __init__(self, session, base_url, handle_http_error):
@@ -13,12 +15,8 @@ class PreviewsOperations(object):
     def list_email_clients(self):
         """List all email clients that can be used to generate email previews.
 
-        Returns a list of available email clients.
-
-        :return: EmailClientListResult
+        :return: A result containing the available email clients.
         :rtype: ~mailosaur.models.EmailClientListResult
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/screenshots/clients" % (self.base_url)
         response = self.session.get(url)
