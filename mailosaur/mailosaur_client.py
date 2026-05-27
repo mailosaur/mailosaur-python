@@ -36,7 +36,7 @@ class MailosaurClient(object):
     :vartype files: ~mailosaur.operations.files_operations.FilesOperations
     :ivar messages: Operations for finding, retrieving, creating, and managing email and SMS messages.
     :vartype messages: ~mailosaur.operations.messages_operations.MessagesOperations
-    :ivar servers: Operations for creating and managing your Mailosaur servers (virtual inboxes).
+    :ivar servers: Operations for creating and managing your Mailosaur inboxes (servers).
     :vartype servers: ~mailosaur.operations.servers_operations.ServersOperations
     :ivar usage: Operations for inspecting account usage limits and recent transactional usage.
     :vartype usage: ~mailosaur.operations.usage_operations.UsageOperations

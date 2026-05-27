@@ -34,7 +34,7 @@ class Message(object):
     :type attachments: list[~mailosaur.models.Attachment]
     :param metadata:
     :type metadata: ~mailosaur.models.Metadata
-    :param server: Identifier for the server in which the message is located.
+    :param server: Identifier for the inbox (server) in which the message is located.
     :type server: str
     """
 

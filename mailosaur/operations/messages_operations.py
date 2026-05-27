@@ -8,7 +8,7 @@ from ..models import MailosaurException
 
 class MessagesOperations(object):
     """Operations for finding, retrieving, creating, forwarding, replying to, and
-    deleting the email and SMS messages received by your Mailosaur servers.
+    deleting the email and SMS messages received by your Mailosaur inboxes (servers).
     Accessed via ``client.messages``.
     """
 
@@ -24,7 +24,7 @@ class MessagesOperations(object):
         **Recommended:** This is the most efficient method of looking up a message,
         therefore we recommend using it wherever possible.
 
-        :param server: The unique identifier of the containing server.
+        :param server: The unique identifier of the containing inbox (server).
         :type server: str
         :param criteria: The criteria with which to find messages during a search.
         :type criteria: ~mailosaur.models.SearchCriteria
@@ -96,7 +96,7 @@ class MessagesOperations(object):
         The summaries are returned sorted by received date, with the most
         recently-received messages appearing first.
 
-        :param server: The unique identifier of the required server.
+        :param server: The unique identifier of the required inbox (server).
         :type server: str
         :param page: Used in conjunction with `itemsPerPage` to support
          pagination.
@@ -130,11 +130,11 @@ class MessagesOperations(object):
         return MessageListResult(data)
 
     def delete_all(self, server):
-        """Permanently delete all messages within a server.
+        """Permanently delete all messages within an inbox (server).
 
         This operation cannot be undone.
 
-        :param server: The unique identifier of the server.
+        :param server: The unique identifier of the inbox (server).
         :type server: str
         :return: None
         :rtype: None
@@ -153,7 +153,7 @@ class MessagesOperations(object):
         The messages are returned sorted by received date, with the most
         recently-received messages appearing first.
 
-        :param server: The unique identifier of the server to search.
+        :param server: The unique identifier of the inbox (server) to search.
         :type server: str
         :param criteria: The criteria with which to find messages during a search.
         :type criteria: ~mailosaur.models.SearchCriteria
@@ -231,7 +231,7 @@ class MessagesOperations(object):
         This is useful in scenarios where you want an email to trigger a workflow
         in your product.
 
-        :param server: The unique identifier of the required server.
+        :param server: The unique identifier of the required inbox (server).
         :type server: str
         :param options: Options to use when creating a new message.
         :type options: ~mailosaur.models.MessageCreateOptions

@@ -6,8 +6,8 @@ from ..models import Server
 from ..models import MailosaurException
 
 class ServersOperations(object):
-    """Operations for creating and managing your Mailosaur servers - the virtual
-    inboxes that group your tests together, each with its own domain and
+    """Operations for creating and managing your Mailosaur inboxes (servers) - they
+    group your tests together, each with its own domain and
     SMTP/POP3/IMAP credentials. Accessed via ``client.servers``.
     """
 
@@ -18,11 +18,11 @@ class ServersOperations(object):
 
     def generate_email_address(self, server):
         """Generates a random email address by appending a random string in front of
-        the server's domain name.
+        the domain name of the inbox (server).
 
-        :param server: The identifier of the server.
+        :param server: The identifier of the inbox (server).
         :type server: str
-        :return: A random email address ending in the server's domain.
+        :return: A random email address ending in the domain of the inbox (server).
         :rtype: str
         """
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')
@@ -30,11 +30,11 @@ class ServersOperations(object):
         return "%s@%s.%s" % (randomString, server, host)
 
     def list(self):
-        """Returns a list of your virtual servers.
+        """Returns a list of your inboxes (servers).
 
-        Servers are returned sorted in alphabetical order.
+        Inboxes (servers) are returned sorted in alphabetical order.
 
-        :return: A result containing your servers.
+        :return: A result containing your inboxes (servers).
         :rtype: ~mailosaur.models.ServerListResult
         """
         url = "%sapi/servers" % (self.base_url)
@@ -49,11 +49,11 @@ class ServersOperations(object):
         return ServerListResult(data)
 
     def create(self, server_create_options):
-        """Creates a new virtual server.
+        """Creates a new inbox (server).
 
-        :param server_create_options: Options used to create a new Mailosaur server.
+        :param server_create_options: Options used to create a new Mailosaur inbox (server).
         :type server_create_options: ~mailosaur.models.ServerCreateOptions
-        :return: The newly-created server.
+        :return: The newly-created inbox (server).
         :rtype: ~mailosaur.models.Server
         """
         url = "%sapi/servers" % (self.base_url)
@@ -68,11 +68,11 @@ class ServersOperations(object):
         return Server(data)
 
     def get(self, id):
-        """Retrieves the detail for a single server.
+        """Retrieves the detail for a single inbox (server).
 
-        :param id: The unique identifier of the server.
+        :param id: The unique identifier of the inbox (server).
         :type id: str
-        :return: The server.
+        :return: The inbox (server).
         :rtype: ~mailosaur.models.Server
         """
         url = "%sapi/servers/%s" % (self.base_url, id)
@@ -87,13 +87,13 @@ class ServersOperations(object):
         return Server(data)
 
     def get_password(self, id):
-        """Retrieves the password for a server.
+        """Retrieves the password for an inbox (server).
 
         This password can be used for SMTP, POP3, and IMAP connectivity.
 
-        :param id: The unique identifier of the server.
+        :param id: The unique identifier of the inbox (server).
         :type id: str
-        :return: The server's password.
+        :return: The password for the inbox (server).
         :rtype: str
         """
         url = "%sapi/servers/%s/password" % (self.base_url, id)
@@ -109,13 +109,13 @@ class ServersOperations(object):
 
     def update(
             self, id, server):
-        """Updates the attributes of a server.
+        """Updates the attributes of an inbox (server).
 
-        :param id: The unique identifier of the server.
+        :param id: The unique identifier of the inbox (server).
         :type id: str
-        :param server: The updated server.
+        :param server: The updated inbox (server).
         :type server: ~mailosaur.models.Server
-        :return: The updated server.
+        :return: The updated inbox (server).
         :rtype: ~mailosaur.models.Server
         """
         url = "%sapi/servers/%s" % (self.base_url, id)
@@ -131,12 +131,12 @@ class ServersOperations(object):
 
     def delete(
             self, id):
-        """Permanently delete a server.
+        """Permanently delete an inbox (server).
 
         This will also delete all messages, associated attachments, etc. within
-        the server. This operation cannot be undone.
+        the inbox (server). This operation cannot be undone.
 
-        :param id: The unique identifier of the server.
+        :param id: The unique identifier of the inbox (server).
         :type id: str
         :return: None
         :rtype: None
