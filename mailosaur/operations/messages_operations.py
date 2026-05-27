@@ -7,7 +7,9 @@ from ..models import MailosaurException
 
 
 class MessagesOperations(object):
-    """MessagesOperations operations.
+    """Operations for finding, retrieving, creating, forwarding, replying to, and
+    deleting the email and SMS messages received by your Mailosaur servers.
+    Accessed via ``client.messages``.
     """
 
     def __init__(self, session, base_url, handle_http_error):
@@ -16,15 +18,16 @@ class MessagesOperations(object):
         self.handle_http_error = handle_http_error
 
     def get(self, server, criteria, timeout=10000, received_after=(datetime.today() - timedelta(hours=1)), dir=None):
-        """Retrieve a message using search criteria.
+        """Waits for a message to be found, returning as soon as a message matching the
+        specified search criteria is found.
 
-        Returns as soon as a message matching the specified search criteria is
-        found. This is the most efficient method of looking up a message.
+        **Recommended:** This is the most efficient method of looking up a message,
+        therefore we recommend using it wherever possible.
 
-        :param server: The identifier of the server hosting the message.
+        :param server: The unique identifier of the containing server.
         :type server: str
-        :param criteria: The search criteria to use in order to find a match.
-        :type criteria: ~mailosaur.models.SearchCriteria      
+        :param criteria: The criteria with which to find messages during a search.
+        :type criteria: ~mailosaur.models.SearchCriteria
         :param timeout: Specify how long to wait for a matching result (in milliseconds).
         :type timeout: int
         :param received_after: Limits results to only messages received after this date/time.
@@ -32,10 +35,11 @@ class MessagesOperations(object):
         :param dir: Optionally limits results based on the direction (`Sent` or `Received`),
          with the default being `Received`.
         :type dir: str
-        :return: Message
+        :return: The first message matching the criteria.
         :rtype: ~mailosaur.models.Message
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        :raises: :class:`MailosaurException<mailosaur.models.MailosaurException>`
+         with error type ``no_messages_found`` if no matching message exists, or
+         ``search_timeout`` if no matching message arrives before the timeout elapses.
         """
         # Defaults timeout to 10s, receivedAfter to 1h
         if len(server) != 8:
@@ -47,17 +51,15 @@ class MessagesOperations(object):
         return self.get_by_id(result.items[0].id)
 
     def get_by_id(self, id):
-        """Retrieve a message.
+        """Retrieves the detail for a single message.
 
-        Retrieves the detail for a single email message. Simply supply the
+        Must be used in conjunction with either list or search in order to get the
         unique identifier for the required message.
 
-        :param id: The identifier of the email message to be retrieved.
-        :type id: str        
-        :return: Message
+        :param id: The unique identifier of the message to be retrieved.
+        :type id: str
+        :return: The full message.
         :rtype: ~mailosaur.models.Message
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages/%s" % (self.base_url, id)
         response = self.session.get(url)
@@ -71,17 +73,15 @@ class MessagesOperations(object):
         return Message(data)
 
     def delete(self, id):
-        """Delete a message.
+        """Permanently deletes a message.
 
-        Permanently deletes a message. This operation cannot be undone. Also
-        deletes any attachments related to the message.
+        Also deletes any attachments related to the message. This operation cannot
+        be undone.
 
-        :param id: The identifier of the message to be deleted.
-        :type id: str        
+        :param id: The identifier for the message.
+        :type id: str
         :return: None
         :rtype: None
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages/%s" % (self.base_url, id)
         response = self.session.delete(url)
@@ -91,29 +91,26 @@ class MessagesOperations(object):
             return
 
     def list(self, server, page=None, items_per_page=None, received_after=None, dir=None):
-        """List all messages.
+        """Returns a list of your messages in summary form.
 
-        Returns a list of your messages in summary form. The summaries are
-        returned sorted by received date, with the most recently-received
-        messages appearing first.
+        The summaries are returned sorted by received date, with the most
+        recently-received messages appearing first.
 
-        :param server: The identifier of the server hosting the messages.
+        :param server: The unique identifier of the required server.
         :type server: str
         :param page: Used in conjunction with `itemsPerPage` to support
          pagination.
         :type page: int
         :param items_per_page: A limit on the number of results to be returned
          per page. Can be set between 1 and 1000 items, the default is 50.
-        :type items_per_page: int   
+        :type items_per_page: int
         :param received_after: Limits results to only messages received after this date/time.
         :type received_after: datetime
         :param dir: Optionally limits results based on the direction (`Sent` or `Received`),
          with the default being `Received`.
         :type dir: str
-        :return: MessageListResult
+        :return: A result containing the message summaries.
         :rtype: ~mailosaur.models.MessageListResult
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages" % (self.base_url)
 
@@ -133,18 +130,14 @@ class MessagesOperations(object):
         return MessageListResult(data)
 
     def delete_all(self, server):
-        """Delete all messages.
+        """Permanently delete all messages within a server.
 
-        Permanently deletes all messages held by the specified server. This
-        operation cannot be undone. Also deletes any attachments related to
-        each message.
+        This operation cannot be undone.
 
-        :param server: The identifier of the server to be emptied.
-        :type server: str        
+        :param server: The unique identifier of the server.
+        :type server: str
         :return: None
         :rtype: None
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages" % (self.base_url)
         params = {'server': server}
@@ -155,15 +148,14 @@ class MessagesOperations(object):
             return
 
     def search(self, server, criteria, page=None, items_per_page=None, timeout=None, received_after=None, error_on_timeout=True, dir=None):
-        """Search for messages.
+        """Returns a list of messages matching the specified search criteria, in summary form.
 
-        Returns a list of messages matching the specified search criteria, in
-        summary form. The messages are returned sorted by received date, with
-        the most recently-received messages appearing first.
+        The messages are returned sorted by received date, with the most
+        recently-received messages appearing first.
 
-        :param server: The identifier of the server hosting the messages.
+        :param server: The unique identifier of the server to search.
         :type server: str
-        :param criteria: The search criteria to match results against.
+        :param criteria: The criteria with which to find messages during a search.
         :type criteria: ~mailosaur.models.SearchCriteria
         :param page: Used in conjunction with `itemsPerPage` to support
          pagination.
@@ -175,16 +167,17 @@ class MessagesOperations(object):
         :type timeout: int
         :param received_after: Limits results to only messages received after this date/time.
         :type received_after: datetime
-        :param error_on_timeout: When set to false, an error will not be throw if timeout 
+        :param error_on_timeout: When set to false, an error will not be thrown if timeout
          is reached (default: true).
         :type error_on_timeout: bool
         :param dir: Optionally limits results based on the direction (`Sent` or `Received`),
          with the default being `Received`.
         :type dir: str
-        :return: MessageListResult
+        :return: A result containing the matching message summaries.
         :rtype: ~mailosaur.models.MessageListResult
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        :raises: :class:`MailosaurException<mailosaur.models.MailosaurException>`
+         with error type ``search_timeout`` if no matching message is found before
+         the timeout elapses, unless ``error_on_timeout`` is set to false.
         """
         url = "%sapi/messages/search" % (self.base_url)
 
@@ -233,20 +226,17 @@ class MessagesOperations(object):
             time.sleep(delay / 1000)
 
     def create(self, server, options):
-        """Create a message.
+        """Creates a new message that can be sent to a verified email address.
 
-        Creates a new message that can be sent to a verified email address. This is
-        useful in scenarios where you want an email to trigger a workflow in your
-        product
+        This is useful in scenarios where you want an email to trigger a workflow
+        in your product.
 
-        :param server: The identifier of the server to create the message in.
+        :param server: The unique identifier of the required server.
         :type server: str
-        :param options: The options with which to create the message.
+        :param options: Options to use when creating a new message.
         :type options: ~mailosaur.models.MessageCreateOptions
-        :return: None
-        :rtype: None
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        :return: The newly-created message.
+        :rtype: ~mailosaur.models.Message
         """
         url = "%sapi/messages" % (self.base_url)
         params = {'server': server}
@@ -262,18 +252,16 @@ class MessagesOperations(object):
         return Message(data)
 
     def forward(self, id, options):
-        """Forward an email.
+        """Forwards the specified message to a verified email address.
 
-        Forwards the specified email to a verified email address.
+        This is useful for simulating a user forwarding one of your email messages.
 
-        :param id: The identifier of the email to forward.
+        :param id: The unique identifier of the message to be forwarded.
         :type id: str
-        :param options: The options with which to forward the email.
+        :param options: Options to use when forwarding a message.
         :type options: ~mailosaur.models.MessageForwardOptions
-        :return: None
-        :rtype: None
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        :return: The forwarded message.
+        :rtype: ~mailosaur.models.Message
         """
         url = "%sapi/messages/%s/forward" % (self.base_url, id)
         response = self.session.post(url, json=options.to_json())
@@ -287,19 +275,17 @@ class MessagesOperations(object):
         return Message(data)
 
     def reply(self, id, options):
-        """Reply to an email.
+        """Sends a reply to the specified message.
 
-        Sends a reply to the specified email. This is useful for when simulating a user
-        replying to one of your emails.
+        This is useful for when simulating a user replying to one of your email
+        or SMS messages.
 
-        :param id: The identifier of the email to reply to.
+        :param id: The unique identifier of the message to be replied to.
         :type id: str
-        :param options: The options with which to reply to the email.
+        :param options: Options to use when replying to a message.
         :type options: ~mailosaur.models.MessageReplyOptions
-        :return: None
-        :rtype: None
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
+        :return: The reply message.
+        :rtype: ~mailosaur.models.Message
         """
         url = "%sapi/messages/%s/reply" % (self.base_url, id)
         response = self.session.post(url, json=options.to_json())
@@ -313,18 +299,14 @@ class MessagesOperations(object):
         return Message(data)
 
     def generate_previews(self, id, options):
-        """Generate email previews.
-
-        Generates screenshots of an email rendered in the specified email clients.
+        """Generates screenshots of an email rendered in the specified email clients.
 
         :param id: The identifier of the email to preview.
         :type id: str
         :param options: The options with which to generate previews.
         :type options: ~mailosaur.models.PreviewRequestOptions
-        :return: PreviewListResult
+        :return: A result containing the generated previews.
         :rtype: ~mailosaur.models.PreviewListResult
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/messages/%s/screenshots" % (self.base_url, id)
         response = self.session.post(url, json=options.to_json())

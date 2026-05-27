@@ -10,7 +10,9 @@ from ..models import MailosaurException
 
 
 class DevicesOperations(object):
-    """DevicesOperations operations.
+    """Operations for managing virtual security devices and retrieving their current
+    one-time passwords (OTPs), used to automate testing of app-based multi-factor
+    authentication. Accessed via ``client.devices``.
     """
 
     def __init__(self, session, base_url, handle_http_error):
@@ -19,20 +21,24 @@ class DevicesOperations(object):
         self.handle_http_error = handle_http_error
 
     def generate_email_address(self, server):
+        """Generates a random email address by appending a random string in front of
+        the server's domain name.
+
+        :param server: The identifier of the server.
+        :type server: str
+        :return: A random email address ending in the server's domain.
+        :rtype: str
+        """
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')
         randomString = ''.join(random.choice(
             string.ascii_uppercase + string.digits) for _ in range(10))
         return "%s@%s.%s" % (randomString, server, host)
 
     def list(self):
-        """List all devices.
+        """Returns a list of your virtual security devices.
 
-        Returns a list of your virtual security devices.
-
-        :return: DeviceListResult
+        :return: A result containing your devices.
         :rtype: ~mailosaur.models.DeviceListResult
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/devices" % (self.base_url)
         response = self.session.get(url)
@@ -46,16 +52,12 @@ class DevicesOperations(object):
         return DeviceListResult(data)
 
     def create(self, device_create_options):
-        """Create a device.
+        """Creates a new virtual security device.
 
-        Creates a new virtual security device and returns it.
-
-        :param device_create_options:
+        :param device_create_options: Options used to create a new Mailosaur virtual security device.
         :type device_create_options: ~mailosaur.models.DeviceCreateOptions
-        :return: Device
+        :return: The newly-created device.
         :rtype: ~mailosaur.models.Device
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/devices" % (self.base_url)
         response = self.session.post(url, json=device_create_options.to_json())
@@ -69,17 +71,13 @@ class DevicesOperations(object):
         return Device(data)
 
     def otp(self, query):
-        """Retrieves the current one-time password for a saved device, or given base32-encoded shared secret.
-
-        Retrieves the detail for a single server. Simply supply the unique
-        identifier for the required server.
+        """Retrieves the current one-time password for a saved device, or given
+        base32-encoded shared secret.
 
         :param query: Either the unique identifier of the device, or a base32-encoded shared secret.
-        :type query: str        
-        :return: OtpResult
+        :type query: str
+        :return: A result containing the current one-time password.
         :rtype: ~mailosaur.models.OtpResult
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         if "-" in query:
             url = "%sapi/devices/%s/otp" % (self.base_url, query)
@@ -106,16 +104,14 @@ class DevicesOperations(object):
 
     def delete(
             self, id):
-        """Delete a device.
+        """Permanently delete a virtual security device.
 
-        Permanently delete a virtual security device. This operation cannot be undone.
+        This operation cannot be undone.
 
-        :param id: The identifier of the device to be deleted.
-        :type id: str        
+        :param id: The unique identifier of the device.
+        :type id: str
         :return: None
         :rtype: None
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/devices/%s" % (self.base_url, id)
         response = self.session.delete(url)

@@ -3,7 +3,9 @@ from ..models import MailosaurException
 from ..models import DeliverabilityReport
 
 class AnalysisOperations(object):
-    """AnalysisOperations operations.
+    """Operations for analyzing the content and deliverability of an email, including
+    SpamAssassin scoring and per-provider deliverability reports.
+    Accessed via ``client.analysis``.
     """
 
     def __init__(self, session, base_url, handle_http_error):
@@ -12,16 +14,12 @@ class AnalysisOperations(object):
         self.handle_http_error = handle_http_error
 
     def spam(self, email):
-        """Perform a spam test.
+        """Perform a spam analysis of an email.
 
-        Perform spam testing on the specified email.
-
-        :param email: The identifier of the email to be analyzed.
-        :type email: str        
-        :return: SpamAnalysisResult
+        :param email: The identifier of the message to be analyzed.
+        :type email: str
+        :return: A result containing the spam score and filter results.
         :rtype: ~mailosaur.models.SpamAnalysisResult
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/analysis/spam/%s" % (self.base_url, email)
         response = self.session.get(url)
@@ -35,16 +33,12 @@ class AnalysisOperations(object):
         return SpamAnalysisResult(data)
 
     def deliverability(self, email):
-        """Perform a deliverability test.
+        """Perform a deliverability report of an email.
 
-        Perform deliverability testing on the specified email.
-
-        :param email: The identifier of the email to be analyzed.
-        :type email: str        
-        :return: DeliverabilityReport
+        :param email: The identifier of the message to be analyzed.
+        :type email: str
+        :return: A deliverability report for the email.
         :rtype: ~mailosaur.models.DeliverabilityReport
-        :raises:
-         :class:`MailosaurException<mailosaur.models.MailosaurException>`
         """
         url = "%sapi/analysis/deliverability/%s" % (self.base_url, email)
         response = self.session.get(url)
