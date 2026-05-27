@@ -1,9 +1,9 @@
 class ServerListResult(object):
-    """The result of a server listing request.
+    """The result of an inbox (server) listing request.
 
-    :param items: The individual servers forming the result. Servers are
-     returned sorted by creation date, with the most recently-created server
-     appearing first.
+    :param items: The individual inboxes (servers) forming the result. Inboxes
+     (servers) are returned sorted by creation date, with the most
+     recently-created inbox (server) appearing first.
     :type items: list[~mailosaur.models.Server]
     """
 

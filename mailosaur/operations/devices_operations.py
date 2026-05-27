@@ -22,11 +22,11 @@ class DevicesOperations(object):
 
     def generate_email_address(self, server):
         """Generates a random email address by appending a random string in front of
-        the server's domain name.
+        the domain name of the inbox (server).
 
-        :param server: The identifier of the server.
+        :param server: The identifier of the inbox (server).
         :type server: str
-        :return: A random email address ending in the server's domain.
+        :return: A random email address ending in the domain of the inbox (server).
         :rtype: str
         """
         host = os.getenv('MAILOSAUR_SMTP_HOST', 'mailosaur.net')

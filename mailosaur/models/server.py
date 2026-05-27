@@ -1,15 +1,15 @@
 class Server(object):
-    """Server.
+    """A Mailosaur inbox (server) - a virtual SMTP/SMS endpoint.
 
-    :param id: Unique identifier for the server. Used as username for
+    :param id: Unique identifier for the inbox (server). Used as username for
      SMTP/POP3 authentication.
     :type id: str
-    :param name: A name used to identify the server.
+    :param name: A name used to identify the inbox (server).
     :type name: str
     :param users: Users (excluding administrators) who have access to the
-     server.
+     inbox (server) when access is restricted.
     :type users: list[str]
-    :param messages: The number of messages currently in the server.
+    :param messages: The number of messages currently in the inbox (server).
     :type messages: int
     """
 
