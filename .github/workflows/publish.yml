@@ -11,6 +11,10 @@ jobs:
   publish:
     runs-on: ${{ vars.LINUX }}
     timeout-minutes: 10
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout source code
@@ -28,20 +32,17 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel twine
+          pip install setuptools wheel
       - name: Version
         run: |
           version=`git describe --abbrev=0 --tags` &&	
           sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ mailosaur/mailosaur_client.py &&	
           sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ mailosaur/version.py &&	
           sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ setup.py
-      - name: Build and publish
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          python setup.py sdist bdist_wheel
-          twine upload dist/*
+      - name: Build
+        run: python setup.py sdist bdist_wheel
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
       - name: Send notifications
         if: ${{ always() }}
         uses: ./.github/actions/notify
